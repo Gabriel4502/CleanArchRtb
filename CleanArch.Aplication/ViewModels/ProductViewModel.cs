@@ -25,9 +25,10 @@ namespace CleanArch.Aplication.ViewModels
         public string Description { get; set; }
 
         [Required(ErrorMessage = "The price is required")]
-        [Range(1,9999.99)]
+        [Range(1, 9999.99)]
         [DisplayFormat(DataFormatString = "{0:C2}")]
         [DisplayName("Price")]
         public decimal Price { get; set; }
+
     }
 }
