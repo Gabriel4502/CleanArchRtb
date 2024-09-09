@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,9 @@ public class Customer
     public string City { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }
+
+    public DateTime CreateAt { get; set; }
+    public DateTime UpdateAt { get; set; }
 
     //Relationships
 

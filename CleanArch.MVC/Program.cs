@@ -1,10 +1,11 @@
-
+using Microsoft.EntityFrameworkCore.Design;
 using CleanArch.Infra.Ioc;
 using CleanArch.MVC.MappingConfig;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
 
     var builder = WebApplication.CreateBuilder(args);
+
 
 
 

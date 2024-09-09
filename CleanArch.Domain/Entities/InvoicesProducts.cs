@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CleanArch.Domain.Entities;
 
-public class InvocesProcudts
+public class InvocesProducts
 {
     public int Id { get; set; }
     public DateTime CreateAt { get; set; }
