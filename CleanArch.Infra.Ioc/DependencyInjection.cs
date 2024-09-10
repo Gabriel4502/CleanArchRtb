@@ -32,6 +32,7 @@ namespace CleanArch.Infra.Ioc
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICategoryRepository, CategoryR>
             services.AddScoped<IProductService, ProductService>();
 
             return services;

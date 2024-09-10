@@ -10,7 +10,7 @@ namespace CleanArch.Domain.Interfaces
     public interface ICustomerRepository
     {
         Task<IEnumerable<Customer>> GetCustomers();
-        Task<IEnumerable<Customer>> getById(int? id);
+        Task<Customer> GetById(int? id);
 
         void Add(Customer customer);
         void Update(Customer customer);

@@ -11,7 +11,7 @@ namespace CleanArch.Aplication.ViewModels
 {
     public class CategoryViewModel
     {
-        public int id { get; set; }
+        public int Id { get; set; }
 
         [Required(ErrorMessage ="Name is required")]
         [MinLength(1)]

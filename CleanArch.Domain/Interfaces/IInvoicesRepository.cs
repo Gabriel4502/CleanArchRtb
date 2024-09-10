@@ -10,7 +10,7 @@ namespace CleanArch.Domain.Interfaces
     public interface IInvoicesRepository
     {
         Task<IEnumerable<Invoice>> GetInvoices();
-        Task<IEnumerable<Invoice>> GetById(int? id);
+        Task<Invoice> GetById(int? id);
         Task<IEnumerable<Invoice>> GetInvoicesByCustomerId(int? customerId);    
 
         void Add (Invoice invoice);

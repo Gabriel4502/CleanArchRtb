@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace CleanArch.Aplication.Interfaces
 {
-    public interface IProductsCategories
+    public interface IProductsCategoriesService
     {
         Task<IEnumerable<ProductsCategoriesViewModel>> GetProductsCategories();
-        Task<IEnumerable<ProductsCategoriesViewModel>> GetById(int id);
+        Task<ProductsCategoriesViewModel> GetById(int id);
 
         Task<ProductsCategoriesViewModel> GetByCategoryAndProductId(int? categoryId, int? productId);
 
         void Add(ProductsCategoriesViewModel category);
         void Update(ProductsCategoriesViewModel category);
-        void Delete(ProductsCategoriesViewModel category);
+        void Remove(int? id);
 
 
     }

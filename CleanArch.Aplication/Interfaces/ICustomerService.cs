@@ -10,10 +10,10 @@ namespace CleanArch.Aplication.Interfaces
     public interface ICustomerService
     {
         Task<IEnumerable<CustomerViewModel>> GetCustomers();
-        Task<IEnumerable<CustomerViewModel>> GetById(int? id);
+        Task<CustomerViewModel> GetById(int? id);
 
         void Add(CustomerViewModel customer);
-        void Apdate(CustomerViewModel customer);
-        void Delete(CustomerViewModel customer);
+        void Update(CustomerViewModel customer);
+        void Remove(int? id);
     }
 }

@@ -11,11 +11,11 @@ namespace CleanArch.Domain.Interfaces
     {
         Task<IEnumerable<Category>> GetCategories();
 
-        Task<IEnumerable<Category>> GetById(int? id);
+        Task<Category> GetById(int? id);
 
-        void AddCategory(Category category);
-        void UpdateCategory(Category category);
-        void DeleteCategory(Category category);
+        void Add(Category category);
+        void Update(Category category);
+        void Delete(Category category);
 
 
     }
