@@ -1,6 +1,5 @@
 ﻿using CleanArch.Aplication.Interfaces;
 using CleanArch.Aplication.Services;
-using CleanArch.Domain.Entities;
 using CleanArch.Domain.Interfaces;
 using CleanArch.Infra.Data.Context;
 using CleanArch.Infra.Data.Repositories;
@@ -36,7 +35,6 @@ namespace CleanArch.Infra.Ioc
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IInvoicesRepository, InvoicesRepository>();
-            services.AddScoped<IProductsCategoriesRepository, ProductsCategoriesRepository>();
 
             services.AddScoped<IProductService, ProductService>();
 
