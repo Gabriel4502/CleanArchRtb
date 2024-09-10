@@ -17,7 +17,7 @@ namespace CleanArch.Aplication.ViewModels
 
         public CategoryViewModel category { get; set; }
 
-        public Product product { get; set; }
+        public ProductViewModel product { get; set; }
 
 
 

@@ -13,7 +13,7 @@ namespace CleanArch.Aplication.Services
 {
     public class CustomerService : ICustomerService
     {
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
         private ICustomerRepository _customerRepository;
         public CustomerService(IMapper mapper, ICustomerRepository customerRepository) {
 
@@ -47,7 +47,7 @@ namespace CleanArch.Aplication.Services
            return _mapper.Map<IEnumerable<CustomerViewModel>>(result);
         }
 
-        public async void Remove(int? id)
+        public void Remove(int? id)
         {
             var result = _customerRepository.GetById(id).Result;
             _customerRepository.Delete(result);

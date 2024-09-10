@@ -41,16 +41,16 @@ namespace CleanArch.Infra.Data.Repositories
             _context.SaveChanges();
         }
 
-        public void Remove(Invoice invoice)
+        public void Delete(Invoice invoice)
         {
             _context.Invoices.Remove(invoice);
             _context.SaveChanges();
         }
 
-        public void Update(Invoice invoice)
-        {
-            _context.Update(invoice);
-            _context.SaveChanges();
-        }
+        //public void Update(Invoice invoice)
+        //{
+        //    _context.Update(invoice);
+        //    _context.SaveChanges();
+        //}
     }
 }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CleanArch.Aplication.Services
+namespace CleanArch.Infra.Data.EntityConfigurations
 {
-    internal class ProductsCategories
+    public class InvoiceConfiguration
     {
     }
 }

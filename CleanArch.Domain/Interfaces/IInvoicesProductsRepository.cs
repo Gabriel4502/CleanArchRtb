@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CleanArch.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,12 @@ namespace CleanArch.Domain.Interfaces
 {
     public interface IInvoicesProductsRepository
     {
-        Task<IEnumerable<IInvoicesProductsRepository>> GetInvoicesProducts();
+        Task<IEnumerable<InvoicesProducts>> GetInvoicesProducts();
+        Task<InvoicesProducts>GetById(int? id);
 
-        void Add(IInvoicesProductsRepository invoicesProducts);
-        void Update(IInvoicesProductsRepository invoicesProducts);
-        void Delete(IInvoicesProductsRepository invoicesProducts);
+        void Add(InvoicesProducts invoicesProducts);
+        //void Update(IInvoicesProductsRepository invoicesProducts);
+        void Delete(InvoicesProducts invoicesProducts);
 
     }
 }
