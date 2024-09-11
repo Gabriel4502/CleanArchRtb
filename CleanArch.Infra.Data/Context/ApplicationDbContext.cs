@@ -17,12 +17,15 @@ public class ApplicationDbContext : IdentityDbContext
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<ProductsCategories> ProductsCategories { get; set;}
-        public DbSet<InvocesProducts> InvocesProducts { get; set; }
+        public DbSet<InvoicesProducts> InvocesProducts { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
             builder.ApplyConfiguration(new ProductConfiguration());
+            builder.ApplyConfiguration(new CustomerConfiguration());
+            builder.ApplyConfiguration(new InvoiceConfiguration());
         }
     }
 

@@ -35,12 +35,17 @@ namespace CleanArch.Infra.Data.Repositories
                 
         }
 
+        public async Task<ProductsCategories> GetById(int? categoryId)
+        {
+            return await _context.ProductsCategories.FindAsync(categoryId);
+        }
+
         public async Task<IEnumerable<ProductsCategories>> GetProductsCategories()
         {
            return await _context.ProductsCategories.ToListAsync();
         }
 
-        public async void Update(ProductsCategories prCategory)
+        public void Update(ProductsCategories prCategory)
         {
              _context.ProductsCategories.Update(prCategory);
              _context.SaveChanges();

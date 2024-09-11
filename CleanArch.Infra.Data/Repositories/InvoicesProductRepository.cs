@@ -1,4 +1,7 @@
-﻿using CleanArch.Domain.Interfaces;
+﻿using CleanArch.Domain.Entities;
+using CleanArch.Domain.Interfaces;
+using CleanArch.Infra.Data.Context;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,19 +12,33 @@ namespace CleanArch.Infra.Data.Repositories
 {
     public class InvoicesProductRepository : IInvoicesProductsRepository
     {
-        public void Add(IInvoicesProductsRepository invoicesProducts)
-        {
-            throw new NotImplementedException();
+        private ApplicationDbContext _context;
+
+        public InvoicesProductRepository(ApplicationDbContext context) {
+            _context = context;
         }
 
-        public void Delete(IInvoicesProductsRepository invoicesProducts)
+        public void Add(InvoicesProducts invoicesProducts)
         {
-            throw new NotImplementedException();
+            _context.InvocesProducts.Add(invoicesProducts);
+            _context.SaveChanges();
         }
 
-        public Task<IEnumerable<IInvoicesProductsRepository>> GetInvoicesProducts()
+
+        public void Delete(InvoicesProducts invoicesProducts)
         {
-            throw new NotImplementedException();
+            _context.InvocesProducts.Remove(invoicesProducts);
+            _context.SaveChanges();
+        }
+
+        public async Task<InvoicesProducts> GetById(int? id)
+        {
+            return await _context.InvocesProducts.FindAsync(id);
+        }
+
+        async Task<IEnumerable<InvoicesProducts>> IInvoicesProductsRepository.GetInvoicesProducts()
+        {
+            return await _context.InvocesProducts.ToListAsync();
         }
     }
 }

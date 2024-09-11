@@ -12,7 +12,7 @@ public class Invoice
     public DateTime CreateAt { get; set; }
     public DateTime UpdateAt { get; set; }
 
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     //Valor total da soma dos produtos
     public decimal Ammount { get; set; }
