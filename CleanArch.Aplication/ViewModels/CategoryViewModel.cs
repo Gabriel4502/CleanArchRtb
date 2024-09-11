@@ -15,17 +15,17 @@ namespace CleanArch.Aplication.ViewModels
 
         [Required(ErrorMessage ="Name is required")]
         [MinLength(1)]
-        [MaxLength(120)]
+        [MaxLength(50)]
         [DisplayName("Name")]
-        public string name { get; set; }
+        public string Name { get; set; }
 
 
         [MinLength(0)]
-        [MaxLength(150)]
+        [MaxLength(100)]
         [DisplayName("Description")]
-        public string description { get; set; }
+        public string? Description { get; set; }
 
 
-        public ICollection<ProductsCategories> ProductsCategories { get; set; }
+        public ICollection<ProductsCategories>? ProductsCategories { get; set; }
     }
 }

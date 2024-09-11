@@ -19,9 +19,8 @@ namespace CleanArch.Aplication.ViewModels
         //Valor total da soma dos produtos
         public decimal Ammount { get; set; }
 
-        //Relationships
 
         public int CustomerId { get; set; }
-        public Customer Customer { get; set; }
+        public Customer? Customer { get; set; }
     }
 }
