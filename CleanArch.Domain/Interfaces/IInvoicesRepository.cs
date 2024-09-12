@@ -14,7 +14,7 @@ namespace CleanArch.Domain.Interfaces
         Task<IEnumerable<Invoice>> GetInvoicesByCustomerId(int? customerId);    
 
         void Add (Invoice invoice);
-        //void Update(Invoice invoice);
+        void Update(Invoice invoice);
         void Delete (Invoice invoice);
         
 

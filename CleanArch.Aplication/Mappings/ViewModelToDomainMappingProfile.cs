@@ -18,6 +18,7 @@ namespace CleanArch.Aplication.Mappings
             CreateMap<CategoryViewModel, Category>();
             CreateMap<ProductsCategoriesViewModel, ProductsCategories>();
             CreateMap<InvoicesProductsViewModel, InvoicesProducts>();
+            CreateMap<InvoiceViewModel, Invoice>();
         }
     }
 }

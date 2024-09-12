@@ -7,6 +7,10 @@
     <UserSecretsId>aspnet-CleanArch.MVC-cc8f60bc-57a9-482b-8cab-38cc68ab7b21</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Views\Invoice\Delete.cs" />
+  </ItemGroup>
+
 
 
   <ItemGroup>

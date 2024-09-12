@@ -21,6 +21,7 @@ namespace CleanArch.Aplication.ViewModels
 
 
         public int CustomerId { get; set; }
-        public Customer? Customer { get; set; }
+        public String? CustomerName { get; set; }
+        public String? CustomerEmail { get; set; }
     }
 }

@@ -17,7 +17,7 @@ public class ApplicationDbContext : IdentityDbContext
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<ProductsCategories> ProductsCategories { get; set;}
-        public DbSet<InvoicesProducts> InvocesProducts { get; set; }
+        public DbSet<InvoicesProducts> InvoicesProducts { get; set; }
         
 
         protected override void OnModelCreating(ModelBuilder builder)

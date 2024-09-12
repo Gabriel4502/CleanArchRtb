@@ -2,43 +2,40 @@
 using CleanArch.Domain.Interfaces;
 using CleanArch.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CleanArch.Infra.Data.Repositories
 {
     public class InvoicesProductRepository : IInvoicesProductsRepository
     {
-        private ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public InvoicesProductRepository(ApplicationDbContext context) {
+        public InvoicesProductRepository(ApplicationDbContext context)
+        {
             _context = context;
         }
 
-        public void Add(InvoicesProducts invoicesProducts)
+        public async Task<IEnumerable<InvoicesProducts>> GetInvoicesProducts()
         {
-            _context.InvocesProducts.Add(invoicesProducts);
-            _context.SaveChanges();
-        }
-
-
-        public void Delete(InvoicesProducts invoicesProducts)
-        {
-            _context.InvocesProducts.Remove(invoicesProducts);
-            _context.SaveChanges();
+            return await _context.InvoicesProducts.ToListAsync();
         }
 
         public async Task<InvoicesProducts> GetById(int? id)
         {
-            return await _context.InvocesProducts.FindAsync(id);
+            return await _context.InvoicesProducts.FindAsync(id);
         }
 
-        async Task<IEnumerable<InvoicesProducts>> IInvoicesProductsRepository.GetInvoicesProducts()
+        public void Add(InvoicesProducts invoicesProducts)
         {
-            return await _context.InvocesProducts.ToListAsync();
+            _context.InvoicesProducts.Add(invoicesProducts);
+            _context.SaveChanges();
+        }
+
+        public void Delete(InvoicesProducts invoicesProducts)
+        {
+            _context.InvoicesProducts.Remove(invoicesProducts);
+            _context.SaveChanges();
         }
     }
 }

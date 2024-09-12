@@ -43,11 +43,17 @@ namespace CleanArch.Aplication.Services
            var invoices = await _repository.GetInvoicesByCustomerId(customerId);
             return _mapper.Map<IEnumerable<InvoiceViewModel>>(invoices);
         }
-
-        public async void Remove(int? id)
+        public void Update(InvoiceViewModel invoice)
         {
-            var result = await _repository.GetById(id);
+           var mapInvoice = _mapper.Map<Invoice>(invoice);
+            _repository.Update(mapInvoice);
+        }
+
+        public void Remove(int? id)
+        {
+            var result = _repository.GetById(id).Result;
             _repository.Delete(result);
         }
+
     }
 }

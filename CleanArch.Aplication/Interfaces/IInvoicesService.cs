@@ -16,6 +16,8 @@ namespace CleanArch.Aplication.Interfaces
         Task<IEnumerable<InvoiceViewModel>> GetinvoicesByCustomerId(int? customerId);
 
         void Add(InvoiceViewModel invoice);
+
+        void Update(InvoiceViewModel invoice);
         void Remove(int? id);
 
 

@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArch.MVC.Controllers
 {
-    public class CategoryController : Controller
+    public class InvoiceController : Controller
     {
-        private readonly ICategoryService _categoryService;
-        private ILogger<CategoryController> _logger;
-        public CategoryController(ICategoryService service, ILogger<CategoryController> logger)
+        private readonly IInvoicesService _invoiceService;
+        private ILogger<InvoiceController> _logger;
+        public InvoiceController(IInvoicesService invoiceService, ILogger<InvoiceController> logger)
         {
-            _categoryService = service;
+            _invoiceService = invoiceService;
             _logger = logger;
         }
 
@@ -19,7 +19,7 @@ namespace CleanArch.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var result = await _categoryService.GetCategories();
+            var result = await _invoiceService.GetInvoices();
             return View(result);
         }
 
@@ -29,44 +29,38 @@ namespace CleanArch.MVC.Controllers
             return View();
         }
 
-        [HttpPost()]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id, Name, Description")] CategoryViewModel category)
+        public IActionResult Create([Bind("CustomerId, Description")] InvoiceViewModel invoice)
         {
-            _logger.LogInformation("Create method called with Category: {@Category}", category);
             if (ModelState.IsValid)
             {
 
-                _categoryService.Add(category);
+                _invoiceService.Add(invoice);
                 return RedirectToAction(nameof(Index));
             }
-            var validationErrors = ModelState.Values.SelectMany(v => v.Errors);
-            foreach (var error in validationErrors)
-            {
-                _logger.LogWarning("ModelState Error: {ErrorMessage}", error.ErrorMessage);
-            }
-            return View(category);
+            return View(invoice);
         }
 
         [HttpGet()]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
-            var categoryVM = await _categoryService.GetById(id);
-            if (categoryVM == null) return NotFound();
-            return View(categoryVM);
+            var invoiceVM = await _invoiceService.GetById(id);
+            if (invoiceVM == null) return NotFound();
+            return View(invoiceVM);
         }
 
         [HttpPost()]
-        public IActionResult Edit([Bind("Id, Name, Description")]
-            CategoryViewModel categoryVM)
+        public IActionResult Edit([Bind("Id,CustomerId, Description, Ammount")]
+            InvoiceViewModel invoiceVM)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-
-                    _categoryService.Update(categoryVM);
+                    
+                    _invoiceService.Update(invoiceVM);
                 }
                 catch (Exception)
                 {
@@ -74,8 +68,9 @@ namespace CleanArch.MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(categoryVM);
+            return View(invoiceVM);
         }
+
 
         public async Task<IActionResult> Details(int? id)
         {
@@ -83,10 +78,10 @@ namespace CleanArch.MVC.Controllers
             {
                 return NotFound();
             }
-            var productVM = await (_categoryService.GetById(id));
+            var invoiceVM = await (_invoiceService.GetById(id));
 
-            if (productVM == null) return NotFound();
-            return View(productVM);
+            if (invoiceVM == null) return NotFound();
+            return View(invoiceVM);
         }
 
         [HttpGet()]
@@ -96,10 +91,10 @@ namespace CleanArch.MVC.Controllers
             {
                 return NotFound();
             }
-            var productVM = await _categoryService.GetById(id);
-            if (productVM == null) return NotFound();
+            var invoiceVM = await _invoiceService.GetById(id);
+            if (invoiceVM == null) return NotFound();
 
-            return View(productVM);
+            return View(invoiceVM);
         }
 
         [HttpPost, ActionName("Delete")]
@@ -113,11 +108,13 @@ namespace CleanArch.MVC.Controllers
 
             try
             {
-                _categoryService.Remove(id.Value);
+                _logger.LogInformation("Executando método deleteConfirmed");
+                _invoiceService.Remove(id.Value);
             }
             catch (Exception ex)
             {
-
+                _logger.LogError(ex, "Error deleting invoice with ID: {InvoiceId}", id);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error deleting invoice.");
                 Console.WriteLine(ex.Message);
 
                 return View("Error");
@@ -125,7 +122,5 @@ namespace CleanArch.MVC.Controllers
 
             return RedirectToAction("Index");
         }
-
     }
-
 }

@@ -17,16 +17,23 @@ namespace CleanArch.Infra.Data.Repositories
             _context = context;
         }
 
+        public async Task<IEnumerable<Invoice>> GetInvoices()
+        {
+            return await _context.Invoices.Include(i => i.Customer).ToListAsync();
+        }
 
         public async Task<Invoice> GetById(int? id)
         {
-           return await _context.Invoices.FindAsync(id);
+
+            return await _context.Invoices
+                           .Include(i => i.Customer)
+                           .SingleOrDefaultAsync(i => i.Id == id);
+
+
+
         }
 
-        public async Task<IEnumerable<Invoice>> GetInvoices()
-        {
-            return await _context.Invoices.ToListAsync();
-        }
+    
 
         public async Task<IEnumerable<Invoice>> GetInvoicesByCustomerId(int? customerId)
         {
@@ -37,20 +44,33 @@ namespace CleanArch.Infra.Data.Repositories
 
         public void Add(Invoice invoice)
         {
-            _context.Invoices.Add(invoice);
+            invoice.CreateAt = DateTime.Now;
+            _context.Add(invoice);
             _context.SaveChanges();
         }
 
         public void Delete(Invoice invoice)
         {
-            _context.Invoices.Remove(invoice);
+
+            _context.Remove(invoice);
             _context.SaveChanges();
         }
 
-        //public void Update(Invoice invoice)
-        //{
-        //    _context.Update(invoice);
-        //    _context.SaveChanges();
-        //}
-    }
+       public void Update(Invoice invoice)
+        {
+            var existingInvoice = _context.Invoices.Find(invoice.Id);
+            if (existingInvoice == null)
+            {
+                throw new Exception("Invoice not found");
+            }
+
+            existingInvoice.CustomerId = invoice.CustomerId;
+            existingInvoice.Description = invoice.Description;
+            existingInvoice.Ammount = invoice.Ammount;
+            existingInvoice.UpdateAt = DateTime.Now;
+
+            _context.Update(existingInvoice);
+            _context.SaveChanges();
+        }
+     }
 }
