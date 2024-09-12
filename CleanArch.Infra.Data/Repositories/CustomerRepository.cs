@@ -36,7 +36,7 @@ namespace CleanArch.Infra.Data.Repositories
 
         public void Delete(Customer customer)
         {
-            _context.Customers.Remove(customer);
+            _context.Remove(customer);
             _context.SaveChanges();
         }
 

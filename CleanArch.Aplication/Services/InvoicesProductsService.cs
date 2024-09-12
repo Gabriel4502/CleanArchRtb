@@ -39,9 +39,9 @@ namespace CleanArch.Aplication.Services
             return  _mapper.Map<IEnumerable<InvoicesProductsViewModel>>(result);
         }
 
-        public async void Remove(int? id)
+        public void Remove(int? id)
         {
-           var result = await _repository.GetById(id);
+           var result = _repository.GetById(id).Result;
            _repository.Delete(result);
 
         }

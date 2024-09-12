@@ -1,0 +1,41 @@
+﻿@model CleanArch.Aplication.ViewModels.ProductsCategoriesViewModel
+
+@{
+    ViewData["Title"] = "Register new Product-Category";
+}
+
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Create">
+    <div class="form-horizontal">
+        <hr />
+
+
+        <vc:summary />
+
+        <div class="form-group"
+        <label asp-for="CategoryId" class="col-md-2 control-label">Category Id</label>
+            <div class="col-md-10">
+                <input asp-for="CategoryId" class="form-control"/>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group"
+        <label asp-for="ProductId" class="col-md-2 control-label">Product Id</label>
+            <div class="col-md-10">
+                <input asp-for="ProductId" class="form-control"/>
+                <span asp-validation-for="ProductId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group"
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-success"/>
+                <a asp-action="Index" class="btn btn-info">Back to List</a>
+            </div>
+        </div>
+
+
+</form>

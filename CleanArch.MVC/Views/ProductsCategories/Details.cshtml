@@ -1,0 +1,38 @@
+﻿@model CleanArch.Aplication.ViewModels.ProductsCategoriesViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h3>Product Details</h3>
+
+<div>
+    <hr />
+
+    <dl class="row">
+        <dt class="col-sm4">
+            @Html.DisplayNameFor(Model => Model.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(Model => Model.Id)
+        </dd>
+        <dt class="col-sm4">
+            @Html.DisplayNameFor(Model => Model.Category)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(Model => Model.Category)
+        </dd>
+        <dt class="col-sm4">
+            @Html.DisplayNameFor(Model => Model.Product)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(Model => Model.Product)
+        </dd>
+
+    </dl>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
+</div>

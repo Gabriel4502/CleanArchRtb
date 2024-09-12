@@ -62,7 +62,7 @@ namespace CleanArch.MVC.Controllers
                 {
                     throw;
                 }
-                return View(customerVM);
+                return RedirectToAction("Index");
             }
             return View(customerVM);
 

@@ -9,15 +9,14 @@ namespace CleanArch.Aplication.ViewModels
 {
     public class ProductsCategoriesViewModel
     {
-        public int id {  get; set; }
+        public int Id {  get; set; }
 
-        public string name { get; set; }
+        public int CategoryId { get; set; }
+        public CategoryViewModel? Category { get; set; }
 
-        public string description { get; set; }
 
-        public CategoryViewModel category { get; set; }
-
-        public ProductViewModel product { get; set; }
+        public int ProductId { get; set; }
+        public ProductViewModel? Product { get; set; }
 
 
 

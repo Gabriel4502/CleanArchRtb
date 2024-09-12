@@ -24,6 +24,7 @@ namespace CleanArch.Aplication.Services
         public void Add(ProductsCategoriesViewModel category)
         {
             var mapCategory = _mapper.Map<ProductsCategories>(category);
+            
             _repository.Add(mapCategory);
         }
 
@@ -45,9 +46,9 @@ namespace CleanArch.Aplication.Services
             return _mapper.Map<IEnumerable<ProductsCategoriesViewModel>>(result);
         }
 
-        public async void Remove(int? id)
+        public  void Remove(int? id)
         {
-            var productCategory = await _repository.GetById(id);
+            var productCategory = _repository.GetById(id).Result;
             _repository.Delete(productCategory);
         }
 

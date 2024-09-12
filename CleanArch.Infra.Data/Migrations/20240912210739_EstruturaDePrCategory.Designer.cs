@@ -4,6 +4,7 @@ using CleanArch.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CleanArch.Infra.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240912210739_EstruturaDePrCategory")]
+    partial class EstruturaDePrCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,7 +43,7 @@ namespace CleanArch.Infra.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("CleanArch.Domain.Entities.Customer", b =>
@@ -84,7 +86,7 @@ namespace CleanArch.Infra.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers", (string)null);
+                    b.ToTable("Customers");
 
                     b.HasData(
                         new
@@ -129,7 +131,7 @@ namespace CleanArch.Infra.Data.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Invoices", (string)null);
+                    b.ToTable("Invoices");
 
                     b.HasData(
                         new
@@ -177,7 +179,7 @@ namespace CleanArch.Infra.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("InvoicesProducts", (string)null);
+                    b.ToTable("InvoicesProducts");
                 });
 
             modelBuilder.Entity("CleanArch.Domain.Entities.Product", b =>
@@ -204,7 +206,7 @@ namespace CleanArch.Infra.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
 
                     b.HasData(
                         new
@@ -250,7 +252,7 @@ namespace CleanArch.Infra.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductsCategories", (string)null);
+                    b.ToTable("ProductsCategories");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
