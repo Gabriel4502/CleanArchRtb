@@ -13,6 +13,8 @@ namespace CleanArch.Aplication.Interfaces
         Task<InvoicesProductsViewModel> GetById(int? id);
 
         void Add(InvoicesProductsViewModel invoicePr);
+
+        void Update(InvoicesProductsViewModel invoicePr);
         void Remove(int? id);
     }
 }

@@ -45,5 +45,11 @@ namespace CleanArch.Aplication.Services
            _repository.Delete(result);
 
         }
+
+        public void Update(InvoicesProductsViewModel invoicePr)
+        {
+            var result = _mapper.Map<InvoicesProducts>(invoicePr);
+            _repository.Update(result);
+        }
     }
 }

@@ -9,16 +9,16 @@ namespace CleanArch.Aplication.ViewModels
 {
     public class InvoicesProductsViewModel
     {
-        int id;
+        public int Id { get; set; }
         public int Quantity { get; set; }
         public decimal SalesPrice { get; set; }
         public decimal Ammount { get; set; }
 
         public int InvoiceId { get; set; }
-        public Invoice Invoice { get; set; }
+        public Invoice? Invoice { get; set; }
 
         public int ProductId { get; set; }
-        public Product Product { get; set; }
+        public Product? Product { get; set; }
 
 
     }

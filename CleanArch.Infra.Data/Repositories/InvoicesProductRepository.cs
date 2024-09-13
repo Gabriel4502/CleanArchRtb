@@ -18,23 +18,37 @@ namespace CleanArch.Infra.Data.Repositories
 
         public async Task<IEnumerable<InvoicesProducts>> GetInvoicesProducts()
         {
-            return await _context.InvoicesProducts.ToListAsync();
+            return await _context.InvoicesProducts
+                        .Include(_ => _.Product)
+                        .Include(_ => _.Invoice)
+                        .ToListAsync();
         }
 
         public async Task<InvoicesProducts> GetById(int? id)
         {
-            return await _context.InvoicesProducts.FindAsync(id);
+            return await _context.InvoicesProducts
+                        .Include(_ => _.Product)
+                        .Include(_ => _.Invoice)
+                        .FirstOrDefaultAsync(Invoice => Invoice.Id == id);
         }
 
         public void Add(InvoicesProducts invoicesProducts)
         {
-            _context.InvoicesProducts.Add(invoicesProducts);
+            invoicesProducts.CreateAt = DateTime.Now;   
+            _context.Add(invoicesProducts);
             _context.SaveChanges();
         }
 
         public void Delete(InvoicesProducts invoicesProducts)
         {
-            _context.InvoicesProducts.Remove(invoicesProducts);
+            _context.Remove(invoicesProducts);
+            _context.SaveChanges();
+        }
+
+        public void Update(InvoicesProducts invoicesProducts)
+        {
+            invoicesProducts.UpdateAt = DateTime.Now;
+            _context.Update(invoicesProducts);
             _context.SaveChanges();
         }
     }

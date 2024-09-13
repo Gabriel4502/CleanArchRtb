@@ -13,7 +13,7 @@ namespace CleanArch.Domain.Interfaces
         Task<InvoicesProducts>GetById(int? id);
 
         void Add(InvoicesProducts invoicesProducts);
-        //void Update(InvoicesProducts invoicesProducts);
+        void Update(InvoicesProducts invoicesProducts);
         void Delete(InvoicesProducts invoicesProducts);
 
     }
