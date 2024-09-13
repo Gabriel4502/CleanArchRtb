@@ -51,5 +51,29 @@ namespace CleanArch.Infra.Data.Repositories
             _context.Update(invoicesProducts);
             _context.SaveChanges();
         }
+
+        public async Task<IEnumerable<Invoice>> GetInvoices()
+        {
+          var invoiceProd =  await _context.InvoicesProducts
+                       .Include(_ => _.Invoice)
+                       .ToListAsync();
+            var invoices = invoiceProd
+                .Select(ip => ip.Invoice)
+                .Distinct().ToList();
+
+            return invoices;
+        }
+
+        public async Task<IEnumerable<Product>> GetProducts()
+        {
+            var invoiceProd = await _context.InvoicesProducts
+                       .Include(_ => _.Product)
+                       .ToListAsync();
+            var products = invoiceProd
+                .Select(ip => ip.Product)
+                .Distinct().ToList();
+
+            return products;
+        }
     }
 }
