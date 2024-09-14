@@ -30,11 +30,7 @@ namespace CleanArch.MVC.Controllers
         [HttpGet()]
         public async Task <IActionResult> Create()
         {
-            //var viewModel = new InvoicesProductsViewModel 
-            //{
-            //    InvoiceOptions = await _inProductsService.GetInvoices(),
-            //    ProductOptions = await _inProductsService.GetProducts()
-            //};
+
             var products  = await _productService.GetProducts();
             var invoices  = await _invoiceService.GetInvoices();
 
@@ -47,12 +43,12 @@ namespace CleanArch.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id, Quantity, SalesPrice, Ammount, InvoiceId, ProductId")] InvoicesProductsViewModel invoiceProdVm)
+        public async Task <IActionResult>  Create([Bind("Id, Quantity, SalesPrice, Ammount, InvoiceId, ProductId")] InvoicesProductsViewModel invoiceProdVm)
         {
             if (ModelState.IsValid)
             {
 
-                _inProductsService.Add(invoiceProdVm);
+                await _inProductsService.Add(invoiceProdVm);
                 return RedirectToAction(nameof(Index));
             }
             ModelState.Clear();
@@ -62,20 +58,27 @@ namespace CleanArch.MVC.Controllers
         [HttpGet()]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null) return NotFound();
             var productVM = await _inProductsService.GetById(id);
+            var products  = await _productService.GetProducts();
+            var invoices  = await _invoiceService.GetInvoices();
+
+            ViewBag.InvoiceId = new SelectList(invoices , "Id","Description");
+            ViewBag.ProductId = new SelectList(products, "Id", "Name");
+            if (id == null) return NotFound();
+           
             if (productVM == null) return NotFound();
             return View(productVM);
         }
 
         [HttpPost()]
-        public IActionResult Edit([Bind("Id, Quantity, SalesPrice, Ammount, InvoiceId, ProductId")]
+        public async Task <IActionResult> Edit([Bind("Id, Quantity, SalesPrice, Ammount, InvoiceId, ProductId")]
             InvoicesProductsViewModel invoiceProdVm)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+                    await _inProductsService.Update(invoiceProdVm);
                     _inProductsService.Update(invoiceProdVm);
                 }
                 catch (Exception)
@@ -86,6 +89,8 @@ namespace CleanArch.MVC.Controllers
             }
             return View(invoiceProdVm);
         }
+
+
 
         public async Task<IActionResult> Details(int? id)
         {

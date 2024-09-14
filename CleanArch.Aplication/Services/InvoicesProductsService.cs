@@ -14,20 +14,28 @@ using System.Threading.Tasks;
 namespace CleanArch.Aplication.Services
 {
     public class InvoicesProductsService : IInvoicesProductsService
-    {
+    { 
         private IMapper _mapper;
         private IInvoicesProductsRepository _repository;
+        private IInvoicesRepository _invoiceRepository;
 
-        public InvoicesProductsService(IMapper mapper, IInvoicesProductsRepository service) {
+        public InvoicesProductsService(IMapper mapper, IInvoicesProductsRepository service, IInvoicesRepository invoiceRepository)
+        {
             _mapper = mapper;
             _repository = service;
-
+            _invoiceRepository = invoiceRepository;
         }
-
-        public void Add(InvoicesProductsViewModel invoicesProducts )
+         
+        public async Task Add(InvoicesProductsViewModel invoicesProducts )
         {
             var result = _mapper.Map<InvoicesProducts>(invoicesProducts);
             result.Ammount = result.SalesPrice * result.Quantity;
+
+            var invoice = await _invoiceRepository.GetById(result.InvoiceId);
+
+            invoice.Ammount += result.Ammount;
+
+            _invoiceRepository.Update(invoice);
             _repository.Add(result);
         }
 
@@ -38,13 +46,6 @@ namespace CleanArch.Aplication.Services
 
         }
 
-        public async Task<IEnumerable<InvoiceViewModel>> GetInvoices()
-        {   
-            var result = await _repository.GetInvoices();
-            var mapResult = result.Select(invoice => _mapper.Map<InvoiceViewModel>(invoice)).ToList();
-            //var mapresult = result.Select(in => _mapper.Map<InvoiceViewModel>( in)).ToList() ;
-            return mapResult;
-        }
 
         public async Task<IEnumerable<InvoicesProductsViewModel>> GetInvoicesProducts()
         {
@@ -52,14 +53,7 @@ namespace CleanArch.Aplication.Services
             return  _mapper.Map<IEnumerable<InvoicesProductsViewModel>>(result).ToList() ;
         }
 
-        public async Task<IEnumerable<ProductViewModel>> GetProducts()
-        {
-            var result = await _repository.GetProducts();
-            var mapResult = result.Select(product => _mapper.Map<ProductViewModel>(product)).ToList();
-
-            return mapResult;
-        }
-
+       
         public void Remove(int? id)
         {
            var result = _repository.GetById(id).Result;
@@ -67,12 +61,19 @@ namespace CleanArch.Aplication.Services
 
         }
 
-        public void Update(InvoicesProductsViewModel invoicePr)
+        public async Task Update(InvoicesProductsViewModel invoicePr)
         {
 
             var result = _mapper.Map<InvoicesProducts>(invoicePr);
+            var invoice = await _invoiceRepository.GetById(result.InvoiceId);
+
             result.Ammount = result.SalesPrice* result.Quantity;
+            var invoicesProducts = await _repository.GetInvoicesByIdEqual(result.Id, result.InvoiceId);
+            invoice.Ammount += invoice.Ammount; 
+        
+            _invoiceRepository.Update(invoice);
             _repository.Update(result);
+           
         }
     }
 }

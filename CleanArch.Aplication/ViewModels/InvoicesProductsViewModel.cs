@@ -28,13 +28,13 @@ namespace CleanArch.Aplication.ViewModels
 
         [Required(ErrorMessage = "The Invoice is required")]
         [DisplayName("Invoices")]
-        public int InvoiceId { get; set; }
+        public int InvoiceId { get; set; } = 0;
         public Invoice? Invoice { get; set; }
 
 
         [Required(ErrorMessage = "The Product is required")]
         [DisplayName("Products")]
-        public int ProductId { get; set; }
+        public int ProductId { get; set; } = 0;
         public Product? Product { get; set; }
 
         //public IEnumerator<InvoicesProducts>? Enumerator { get; set; }

@@ -47,7 +47,19 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(Model => Model.CustomerEmail)
-        </dd>
+        </dd> 
+        <dt class="col-sm2">
+            Products
+        </dt>
+            <dd class="col-sm-10">
+                <label>Items:</label>
+                <select class="form-control" >
+                    @foreach (var item in ViewBag.ProductsOptions as IEnumerable<SelectListItem>)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+            </dd>
     </dl>
     <div>
         <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>

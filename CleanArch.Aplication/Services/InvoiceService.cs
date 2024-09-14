@@ -3,6 +3,7 @@ using CleanArch.Aplication.Interfaces;
 using CleanArch.Aplication.ViewModels;
 using CleanArch.Domain.Entities;
 using CleanArch.Domain.Interfaces;
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,13 +16,17 @@ namespace CleanArch.Aplication.Services
     {
         private readonly IMapper _mapper;
         private IInvoicesRepository _repository;
-        public InvoiceService(IMapper mapper, IInvoicesRepository repository) {
+        private IInvoicesProductsRepository _inProdrepository;
+        public InvoiceService(IMapper mapper, IInvoicesRepository repository, IInvoicesProductsRepository inProdrepository)
+        {
             _mapper = mapper;
             _repository = repository;
-        }
+            _inProdrepository = inProdrepository;
+        } 
 
         public void Add(InvoiceViewModel invoice)
         {
+
             var mapInvoice = _mapper.Map<Invoice>(invoice);
             _repository.Add(mapInvoice);
         }
@@ -43,8 +48,9 @@ namespace CleanArch.Aplication.Services
            var invoices = await _repository.GetInvoicesByCustomerId(customerId);
             return _mapper.Map<IEnumerable<InvoiceViewModel>>(invoices);
         }
-        public void Update(InvoiceViewModel invoice)
+        public  void Update(InvoiceViewModel invoice)
         {
+            
            var mapInvoice = _mapper.Map<Invoice>(invoice);
             _repository.Update(mapInvoice);
         }
@@ -55,5 +61,15 @@ namespace CleanArch.Aplication.Services
             _repository.Delete(result);
         }
 
+        public async Task<IEnumerable<InvoicesProductsViewModel>> GetInvoiceProductsByInvoiceId(int? id)
+        {
+            var products = await _inProdrepository.GetInvoicesProducts();
+            
+            var filteredProducts =  products.Where(_ => _.InvoiceId == id).ToList();
+
+            return _mapper.Map<IEnumerable<InvoicesProductsViewModel>>(filteredProducts);
+        }
+
+       
     }
 }

@@ -10,7 +10,7 @@
             <input type="hidden" asp-for="Id" />
             <div class="form-group" ´>
                 <label asp-for="CustomerId" class="control-label"></label>
-                <input asp-for="CustomerId" class="form-control" />
+                @Html.DropDownListFor(model => model.CustomerId, (SelectList)ViewBag.CustomerOptions, new { @class = "form-control" })
                 <span asp-validation-for="CustomerId" class="text-danger"></span>
             </div>
 

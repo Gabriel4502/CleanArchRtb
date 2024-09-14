@@ -41,7 +41,7 @@ namespace CleanArch.Infra.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("CleanArch.Domain.Entities.Customer", b =>
@@ -84,7 +84,7 @@ namespace CleanArch.Infra.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
 
                     b.HasData(
                         new
@@ -129,7 +129,7 @@ namespace CleanArch.Infra.Data.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Invoices");
+                    b.ToTable("Invoices", (string)null);
 
                     b.HasData(
                         new
@@ -179,7 +179,7 @@ namespace CleanArch.Infra.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("InvoicesProducts");
+                    b.ToTable("InvoicesProducts", (string)null);
                 });
 
             modelBuilder.Entity("CleanArch.Domain.Entities.Product", b =>
@@ -206,7 +206,7 @@ namespace CleanArch.Infra.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
 
                     b.HasData(
                         new
@@ -252,7 +252,7 @@ namespace CleanArch.Infra.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductsCategories");
+                    b.ToTable("ProductsCategories", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

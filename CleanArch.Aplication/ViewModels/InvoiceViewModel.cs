@@ -24,6 +24,6 @@ namespace CleanArch.Aplication.ViewModels
         public String? CustomerName { get; set; }
         public String? CustomerEmail { get; set; }
 
-        public IEnumerable<InvoiceViewModel> InvoiceOptions { get; set; } = new List<InvoiceViewModel>();
+        public IEnumerable<InvoicesProductsViewModel> ProductsOptions { get; set; } = new List<InvoicesProductsViewModel>();
     }
 }

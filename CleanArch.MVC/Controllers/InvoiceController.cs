@@ -1,6 +1,7 @@
 ﻿using CleanArch.Aplication.Interfaces;
 using CleanArch.Aplication.Services;
 using CleanArch.Aplication.ViewModels;
+using CleanArch.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -11,11 +12,13 @@ namespace CleanArch.MVC.Controllers
         private readonly IInvoicesService _invoiceService;
         private ILogger<InvoiceController> _logger;
         private readonly ICustomerService _customerService;
-        public InvoiceController(IInvoicesService invoiceService, ILogger<InvoiceController> logger, ICustomerService customer)
+        private readonly IInvoicesProductsService _productService;
+        public InvoiceController(IInvoicesService invoiceService, ILogger<InvoiceController> logger, ICustomerService customer, IInvoicesProductsService productService)
         {
             _invoiceService = invoiceService;
             _customerService = customer;
             _logger = logger;
+            _productService = productService;
         }
 
 
@@ -51,6 +54,10 @@ namespace CleanArch.MVC.Controllers
         [HttpGet()]
         public async Task<IActionResult> Edit(int? id)
         {
+            var customers = await _customerService.GetCustomers();
+
+            ViewBag.CustomerId = new SelectList(customers, "Id", "Name");
+
             if (id == null) return NotFound();
             var invoiceVM = await _invoiceService.GetById(id);
             if (invoiceVM == null) return NotFound();
@@ -80,6 +87,13 @@ namespace CleanArch.MVC.Controllers
 
         public async Task<IActionResult> Details(int? id)
         {
+
+            var products = _productService.GetInvoicesProducts().Result.Where(_ => _.InvoiceId == id).ToList();
+            ViewBag.ProductsOptions = products.Select(ip => new SelectListItem
+            {
+                Value = ip.Id.ToString(),
+                Text = $"ID: {ip.Id} | Quantity: {ip.Quantity} | Sales Price: {ip.SalesPrice:F2} | Product-Name: {ip.Product?.Name}"
+            }).ToList();
             if (id == null)
             {
                 return NotFound();

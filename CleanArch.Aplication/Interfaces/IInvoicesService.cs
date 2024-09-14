@@ -12,7 +12,7 @@ namespace CleanArch.Aplication.Interfaces
     {
         Task<IEnumerable<InvoiceViewModel>> GetInvoices();
         Task<InvoiceViewModel> GetById(int? id);
-
+        Task<IEnumerable<InvoicesProductsViewModel>> GetInvoiceProductsByInvoiceId(int? id);
         Task<IEnumerable<InvoiceViewModel>> GetinvoicesByCustomerId(int? customerId);
 
         void Add(InvoiceViewModel invoice);

@@ -58,18 +58,10 @@ namespace CleanArch.Infra.Data.Repositories
 
        public void Update(Invoice invoice)
         {
-            var existingInvoice = _context.Invoices.Find(invoice.Id);
-            if (existingInvoice == null)
-            {
-                throw new Exception("Invoice not found");
-            }
+            
+            invoice.UpdateAt = DateTime.Now;
 
-            existingInvoice.CustomerId = invoice.CustomerId;
-            existingInvoice.Description = invoice.Description;
-            existingInvoice.Ammount = invoice.Ammount;
-            existingInvoice.UpdateAt = DateTime.Now;
-
-            _context.Update(existingInvoice);
+            _context.Update(invoice);
             _context.SaveChanges();
         }
      }
