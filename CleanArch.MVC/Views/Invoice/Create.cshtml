@@ -19,7 +19,8 @@
         <div class="form-group"
         <label asp-for="CustomerId" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="CustomerId" class="form-control"/>
+                @* <input asp-for="CustomerId" class="form-control"/> *@
+                @Html.DropDownListFor(model => model.CustomerId , (SelectList)ViewBag.InvoiceOptions, new{ @class = "form-control"}  )
                 <span asp-validation-for="CustomerId" class="text-danger"></span>
             </div>
         </div>

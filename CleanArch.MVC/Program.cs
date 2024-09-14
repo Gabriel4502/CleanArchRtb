@@ -21,8 +21,7 @@ using System.Globalization;
     builder.Services.AddRazorPages();
     builder.Services.AddAutoMapperConfiguration();
 
-
-    var app = builder.Build();
+var app = builder.Build();
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
@@ -49,7 +48,13 @@ using System.Globalization;
         pattern: "{controller=Home}/{action=Index}/{id?}");
     app.MapRazorPages();
 
-var defaultCulture = new CultureInfo("pt-BR");
+var cultureInfo = new CultureInfo("en-US");
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
+ builder = WebApplication.CreateBuilder(args);
+
+var defaultCulture = new CultureInfo("en-US");
 var localizationOptions = new RequestLocalizationOptions
 {
     DefaultRequestCulture = new RequestCulture(defaultCulture),

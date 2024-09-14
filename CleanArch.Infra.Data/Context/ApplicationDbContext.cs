@@ -27,6 +27,7 @@ public class ApplicationDbContext : IdentityDbContext
             builder.ApplyConfiguration(new CustomerConfiguration());
             builder.ApplyConfiguration(new InvoiceConfiguration());
             builder.ApplyConfiguration(new CategoryConfiguration());
+            builder.ApplyConfiguration(new InvoiceProductConfiguration());
         }
     }
 

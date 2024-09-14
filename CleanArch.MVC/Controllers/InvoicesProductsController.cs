@@ -1,6 +1,7 @@
 ﻿using CleanArch.Aplication.Interfaces;
 using CleanArch.Aplication.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CleanArch.MVC.Controllers
 
@@ -8,10 +9,14 @@ namespace CleanArch.MVC.Controllers
     public class InvoicesProducts : Controller
     {
         private readonly IInvoicesProductsService _inProductsService;
-        public InvoicesProducts(IInvoicesProductsService inProdService)
+        private readonly IProductService _productService;
+        private readonly IInvoicesService _invoiceService;
+        public InvoicesProducts(IInvoicesProductsService inProdService,
+            IProductService prodService, IInvoicesService invoicesService )
         {
             _inProductsService = inProdService;
-
+            _productService = prodService;
+            _invoiceService = invoicesService;
         }
 
 
@@ -23,8 +28,20 @@ namespace CleanArch.MVC.Controllers
         }
 
         [HttpGet()]
-        public IActionResult Create()
+        public async Task <IActionResult> Create()
         {
+            //var viewModel = new InvoicesProductsViewModel 
+            //{
+            //    InvoiceOptions = await _inProductsService.GetInvoices(),
+            //    ProductOptions = await _inProductsService.GetProducts()
+            //};
+            var products  = await _productService.GetProducts();
+            var invoices  = await _invoiceService.GetInvoices();
+
+            ViewBag.InvoiceId = new SelectList(invoices , "Id","Description");
+            ViewBag.ProductId = new SelectList(products, "Id", "Name");
+
+
             return View();
         }
 
@@ -38,6 +55,7 @@ namespace CleanArch.MVC.Controllers
                 _inProductsService.Add(invoiceProdVm);
                 return RedirectToAction(nameof(Index));
             }
+            ModelState.Clear();
             return View(invoiceProdVm);
         }
 

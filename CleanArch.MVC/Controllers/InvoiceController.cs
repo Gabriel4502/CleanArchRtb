@@ -2,6 +2,7 @@
 using CleanArch.Aplication.Services;
 using CleanArch.Aplication.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CleanArch.MVC.Controllers
 {
@@ -9,9 +10,11 @@ namespace CleanArch.MVC.Controllers
     {
         private readonly IInvoicesService _invoiceService;
         private ILogger<InvoiceController> _logger;
-        public InvoiceController(IInvoicesService invoiceService, ILogger<InvoiceController> logger)
+        private readonly ICustomerService _customerService;
+        public InvoiceController(IInvoicesService invoiceService, ILogger<InvoiceController> logger, ICustomerService customer)
         {
             _invoiceService = invoiceService;
+            _customerService = customer;
             _logger = logger;
         }
 
@@ -24,8 +27,11 @@ namespace CleanArch.MVC.Controllers
         }
 
         [HttpGet()]
-        public IActionResult Create()
+        public async Task <IActionResult> Create()
         {
+            var customers = await _customerService.GetCustomers();
+
+            ViewBag.CustomerId = new SelectList(customers, "Id", "Name");
             return View();
         }
 

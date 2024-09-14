@@ -54,24 +54,20 @@ namespace CleanArch.Infra.Data.Repositories
 
         public async Task<IEnumerable<Invoice>> GetInvoices()
         {
-          var invoiceProd =  await _context.InvoicesProducts
-                       .Include(_ => _.Invoice)
-                       .ToListAsync();
-            var invoices = invoiceProd
-                .Select(ip => ip.Invoice)
-                .Distinct().ToList();
+            var invoices = await _context.InvoicesProducts
+           .Include(ip => ip.Invoice)
+           .Select(ip => ip.Invoice)
+           .ToListAsync();
 
             return invoices;
         }
 
         public async Task<IEnumerable<Product>> GetProducts()
         {
-            var invoiceProd = await _context.InvoicesProducts
-                       .Include(_ => _.Product)
-                       .ToListAsync();
-            var products = invoiceProd
-                .Select(ip => ip.Product)
-                .Distinct().ToList();
+            var products = await _context.InvoicesProducts
+        .Include(ip => ip.Product)
+        .Select(ip => ip.Product)
+        .ToListAsync();
 
             return products;
         }

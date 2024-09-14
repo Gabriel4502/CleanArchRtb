@@ -3,6 +3,8 @@ using CleanArch.Aplication.Interfaces;
 using CleanArch.Aplication.ViewModels;
 using CleanArch.Domain.Entities;
 using CleanArch.Domain.Interfaces;
+
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +17,11 @@ namespace CleanArch.Aplication.Services
     {
         private IMapper _mapper;
         private IInvoicesProductsRepository _repository;
+
         public InvoicesProductsService(IMapper mapper, IInvoicesProductsRepository service) {
             _mapper = mapper;
             _repository = service;
+
         }
 
         public void Add(InvoicesProductsViewModel invoicesProducts )
@@ -44,8 +48,8 @@ namespace CleanArch.Aplication.Services
 
         public async Task<IEnumerable<InvoicesProductsViewModel>> GetInvoicesProducts()
         {
-            var result = await _repository.GetInvoicesProducts();
-            return  _mapper.Map<IEnumerable<InvoicesProductsViewModel>>(result);
+            var result = await _repository.GetInvoicesProducts() ;
+            return  _mapper.Map<IEnumerable<InvoicesProductsViewModel>>(result).ToList() ;
         }
 
         public async Task<IEnumerable<ProductViewModel>> GetProducts()
