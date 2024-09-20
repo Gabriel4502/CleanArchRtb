@@ -146,47 +146,26 @@ namespace CleanArch.MVC.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpGet]
-        public IActionResult InvoiceReport(int? id)
+        [HttpPost]
+        public IActionResult GeneratePdfReport(int invoiceId)
         {
-            if (id == null) { return NotFound(); }
 
-            var viewer = new WebDocumentViewerModel();
+            var invoiceData = _invoiceService.GetById (invoiceId);
 
-            return RedirectToAction("InvoiceReport", new { invoiceId = id });
+           
+            var report = new InvoiceProductsReport();
+
+            report.Parameters["InvoiceId"].Value = invoiceId;
+            report.CreateDocument();
+
+            String reportName = report.Name;
+            using (var memoryStream = new MemoryStream())
+            {
+                report.ExportToPdf(memoryStream);
+                return File(memoryStream.ToArray(), "application/pdf", "InvoiceReport.pdf");
+            }
         }
 
-        //public IActionResult InvoiceReport(int id)
-        //{
-        //    if(id == null) { return NotFound(); }
-
-        //       var viewer = new WebDocumentViewerModel();
-        //    var report = new InvoiceProductsReports(id);
-        //    report.Parameters["InvoiceId"].Value = id;
-        //    report.Parameters["InvoiceId"].Visible = false;
-        //    return View();
-        //}
-
-
-        //public IActionResult ShowReport(int invoiceId)
-        //{
-
-        //    ViewBag.InvoiceId = invoiceId;
-
-        //    var report = ReportsFactory.Reports["InvoiceReport"]();
-        //    report.Parameters["InvoiceId"].Value = invoiceId;
-
-
-        //    return View(report);
-        //}
-
-        public IActionResult DocumentViewer(int id,
-           [FromServices] IWebDocumentViewerClientSideModelGenerator viewerModelGenerator,
-           [FromQuery] string reportName)
-        {
-            reportName = string.IsNullOrEmpty(reportName) ? "InvoicesReport" : reportName;
-            var viewerModel = viewerModelGenerator.GetModel(reportName, WebDocumentViewerController.DefaultUri);
-            return View(viewerModel);
-        }
+       
     }
 }
