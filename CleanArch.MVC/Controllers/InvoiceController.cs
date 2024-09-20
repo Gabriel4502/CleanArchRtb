@@ -2,6 +2,9 @@
 using CleanArch.Aplication.Services;
 using CleanArch.Aplication.ViewModels;
 using CleanArch.Domain.Entities;
+using CleanArch.MVC.Reports;
+using DevExpress.AspNetCore.Reporting.WebDocumentViewer;
+using DevExpress.XtraReports.Web.WebDocumentViewer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -141,6 +144,49 @@ namespace CleanArch.MVC.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult InvoiceReport(int? id)
+        {
+            if (id == null) { return NotFound(); }
+
+            var viewer = new WebDocumentViewerModel();
+
+            return RedirectToAction("InvoiceReport", new { invoiceId = id });
+        }
+
+        //public IActionResult InvoiceReport(int id)
+        //{
+        //    if(id == null) { return NotFound(); }
+
+        //       var viewer = new WebDocumentViewerModel();
+        //    var report = new InvoiceProductsReports(id);
+        //    report.Parameters["InvoiceId"].Value = id;
+        //    report.Parameters["InvoiceId"].Visible = false;
+        //    return View();
+        //}
+
+
+        //public IActionResult ShowReport(int invoiceId)
+        //{
+
+        //    ViewBag.InvoiceId = invoiceId;
+
+        //    var report = ReportsFactory.Reports["InvoiceReport"]();
+        //    report.Parameters["InvoiceId"].Value = invoiceId;
+
+
+        //    return View(report);
+        //}
+
+        public IActionResult DocumentViewer(int id,
+           [FromServices] IWebDocumentViewerClientSideModelGenerator viewerModelGenerator,
+           [FromQuery] string reportName)
+        {
+            reportName = string.IsNullOrEmpty(reportName) ? "InvoicesReport" : reportName;
+            var viewerModel = viewerModelGenerator.GetModel(reportName, WebDocumentViewerController.DefaultUri);
+            return View(viewerModel);
         }
     }
 }

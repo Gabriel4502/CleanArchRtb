@@ -4,6 +4,8 @@ using CleanArch.Domain.Entities;
 using CleanArch.Domain.Interfaces;
 using CleanArch.Infra.Data.Context;
 using CleanArch.Infra.Data.Repositories;
+using DevExpress.AspNetCore;
+using DevExpress.XtraReports.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -46,6 +48,10 @@ namespace CleanArch.Infra.Ioc
             services.AddScoped<IProductsCategoriesService, ProductsCategoriesService>();
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddDevExpressControls();
+
+            //services.AddScoped<IReportStorageWebExtension, CustomReportStorageWebExtension>();
+            //services.AddSingleton<IReportProvider, CustomReportProvider> ();    
           
             return services;
         }

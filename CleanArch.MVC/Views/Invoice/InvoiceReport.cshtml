@@ -1,0 +1,39 @@
+﻿@using DevExpress.AspNetCore
+@using CleanArch.MVC.Reports
+@model CleanArch.MVC.InvoiceReport.ReportViewModel;
+
+@{
+
+    <link rel="stylesheet" href="~/css/viewer.part.bundle.css" />
+    <script src="~/js/viewer.part.bundle.js"></script>
+
+    @Html.DevExpress().WebDocumentViewer("DocumentViewer").Height("1000px").Bind(new InvoiceProductsReports(Model.InvoiceId))
+  
+    // var viewerRender = Html.DevExpress().WebDocumentViewer("DocumentViewer")
+    //     .Height("1000px")
+    //     .Bind(Model);
+    // @viewerRender.RenderHtml() 
+}
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        // Extract the 'Id' from the URL query string
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('Id');
+
+        // Ensure the 'Id' exists in the URL
+        if (id) {
+            // Bind the report to the DocumentViewer with the extracted Id
+            var viewer = DevExpress.Reporting.Viewer.DocumentViewer;
+            viewer.GetReportDesignerModel().Preview.GetParametersModel().then(function (paramsModel) {
+                // Assuming the parameter in the report is called "parameter1"
+                var reportParam = paramsModel.getParameterByName("parameter1");
+                if (reportParam) {
+                    reportParam.Value(id);
+                }
+
+                // Submit parameters to refresh the report
+                paramsModel.submit();
+            });
+        }
+    });
+</script>

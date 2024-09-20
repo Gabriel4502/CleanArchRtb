@@ -82,6 +82,21 @@
                         <a asp-action="Delete" asp-route-id="@item.Id" title="Delete" class="btn btn-danger">
                             <span class="fas fa-trash-alt">Delete</span>
                         </a>
+
+                        <a asp-action="InvoiceReport" asp-route-id="@item.Id" class="btn btn-primary">Report</a>
+                   @*      <script type="text/javascript">
+                            function OnClick() {
+                                var reportName = "InvoiceProductsReports";
+                                var paramName = "InvoiceId";
+                                var paramValue = document.getElementById("paramValueField").value;
+                                var paramQueryString = paramName + '=' + @item.Id;
+
+                                DocumentViewer.OpenReport(reportName + "?" + paramQueryString);
+                            }
+                        </script> *@
+                       @*  <a asp-action="InvoiceReport" asp-route-id="@item.Id" title="Report" class="btn btn-danger">
+                            <span class="fas fa-trash-alt">Report</span>
+                        </a> *@
                     </td>
 
                 </tr>
