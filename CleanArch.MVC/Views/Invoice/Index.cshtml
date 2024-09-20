@@ -70,12 +70,13 @@
                         @Html.DisplayFor(modelItem => item.Ammount)
                     </td>
 
-                    <td>
+                    <td style="display:flex; justify-content: space-between; padding: 0">
 
-                        <form asp-action="GeneratePdfReport" method="post">
+                        <form style="display:flex; box-sizing: border-box" asp-action="GeneratePdfReport" method="post">
                             <input type="hidden" name="invoiceId" value="@item.Id" />
                             <button type="submit" class="btn btn-secondary">Export</button>
                         </form>
+
                         <a asp-action="Details" asp-route-id="@item.Id" title="Details" class="btn btn-primary">
                             <span class="fas fa-search">Details</span>
                         </a>
@@ -83,7 +84,7 @@
                         <a asp-action="Delete" asp-route-id="@item.Id" title="Delete" class="btn btn-danger">
                             <span class="fas fa-trash-alt">Delete</span>
                         </a>
-
+                      
                       
 
                    @*      <script type="text/javascript">
