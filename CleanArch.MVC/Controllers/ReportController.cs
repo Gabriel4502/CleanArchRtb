@@ -1,5 +1,5 @@
 ﻿using CleanArch.Domain.Entities;
-using CleanArch.MVC.Reports;
+using CleanArch.MVC.InvoiceReport;
 using DevExpress.AspNetCore.Reporting.WebDocumentViewer;
 using DevExpress.XtraReports.UI;
 using DevExpress.XtraReports.Web.WebDocumentViewer;

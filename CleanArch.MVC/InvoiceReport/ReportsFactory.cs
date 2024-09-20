@@ -1,5 +1,5 @@
 ﻿using DevExpress.XtraReports.UI;
-using CleanArch.MVC.Reports;
+using CleanArch.MVC.InvoiceReport;
 using System;
 using System.Collections.Generic;
 
@@ -17,7 +17,7 @@ namespace CleanArch.MVC.InvoiceReport
 
         private static XtraReport CreateInvoiceReport(int invoiceId)
         {
-            var report = new InvoiceProductsReports(invoiceId);
+            var report = new InvoiceProductsReport();
 
 
             report.Parameters["InvoiceId"].Value = invoiceId;

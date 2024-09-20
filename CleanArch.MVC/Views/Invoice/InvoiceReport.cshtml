@@ -1,5 +1,5 @@
 ﻿@using DevExpress.AspNetCore
-@using CleanArch.MVC.Reports
+@using CleanArch.MVC.InvoiceReport
 @model CleanArch.MVC.InvoiceReport.ReportViewModel;
 
 @{
@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="~/css/viewer.part.bundle.css" />
     <script src="~/js/viewer.part.bundle.js"></script>
 
-    @Html.DevExpress().WebDocumentViewer("DocumentViewer").Height("1000px").Bind(new InvoiceProductsReports(Model.InvoiceId))
+    @Html.DevExpress().WebDocumentViewer("DocumentViewer").Height("1000px").Bind(new InvoiceProductsReport())
   
     // var viewerRender = Html.DevExpress().WebDocumentViewer("DocumentViewer")
     //     .Height("1000px")

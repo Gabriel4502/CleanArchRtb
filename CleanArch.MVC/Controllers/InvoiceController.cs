@@ -2,7 +2,7 @@
 using CleanArch.Aplication.Services;
 using CleanArch.Aplication.ViewModels;
 using CleanArch.Domain.Entities;
-using CleanArch.MVC.Reports;
+using CleanArch.MVC.InvoiceReport;
 using DevExpress.AspNetCore.Reporting.WebDocumentViewer;
 using DevExpress.XtraReports.Web.WebDocumentViewer;
 using Microsoft.AspNetCore.Mvc;
