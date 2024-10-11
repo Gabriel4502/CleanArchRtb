@@ -140,5 +140,18 @@ namespace CleanArch.MVC.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<JsonResult> GetSalesPrice(int productId)
+        {
+            var product = await _productService.GetById(productId);
+            if (product != null)
+            {
+               
+                return Json(new { salesPrice = product.Price });
+            }
+
+            return Json(new { salesPrice = 0 });
+        }
     }
 }

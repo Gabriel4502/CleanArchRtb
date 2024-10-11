@@ -77,6 +77,10 @@
                             <button type="submit" class="btn btn-secondary">Export</button>
                         </form>
 
+                        <a asp-action="Comprar" asp-route-id="@item.Id" title="Comprar" class="btn btn-warning ">
+                            <span class="fas fa-trash-alt">Comprar</span>
+                        </a>
+
                         <a asp-action="Details" asp-route-id="@item.Id" title="Details" class="btn btn-primary">
                             <span class="fas fa-search">Details</span>
                         </a>
@@ -84,7 +88,8 @@
                         <a asp-action="Delete" asp-route-id="@item.Id" title="Delete" class="btn btn-danger">
                             <span class="fas fa-trash-alt">Delete</span>
                         </a>
-                      
+
+                     
                       
 
                    @*      <script type="text/javascript">
