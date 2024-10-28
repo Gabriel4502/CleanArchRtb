@@ -13,15 +13,17 @@ namespace CleanArch.MVC.Controllers
     public class InvoiceController : Controller
     {
         private readonly IInvoicesService _invoiceService;
+        private readonly IProductService _productService1;
         private ILogger<InvoiceController> _logger;
         private readonly ICustomerService _customerService;
         private readonly IInvoicesProductsService _productService;
-        public InvoiceController(IInvoicesService invoiceService, ILogger<InvoiceController> logger, ICustomerService customer, IInvoicesProductsService productService)
+        public InvoiceController(IInvoicesService invoiceService, ILogger<InvoiceController> logger, ICustomerService customer, IInvoicesProductsService productService, IProductService productService1)
         {
             _invoiceService = invoiceService;
             _customerService = customer;
             _logger = logger;
             _productService = productService;
+            _productService1 = productService1;
         }
 
 
@@ -106,6 +108,58 @@ namespace CleanArch.MVC.Controllers
             if (invoiceVM == null) return NotFound();
             return View(invoiceVM);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Comprar(Nullable<int> id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            // Obter a invoice pelo id
+            var invoiceVm = await _invoiceService.GetById(id);
+
+            // Obter os produtos associados à invoice
+            var invoiceProd = _productService.GetInvoicesProducts().Result.Where(_ => _.InvoiceId == id).ToList();
+            var productList = await _productService1.GetProducts();
+
+            if (invoiceProd == null || !invoiceProd.Any())
+            {
+                return NotFound(); 
+            }
+
+            // Armazenar a lista de produtos no ViewBag corretamente
+            ViewBag.ProductsOptions = invoiceProd.Select(ip => new SelectListItem
+            {
+                Value = ip.Id.ToString(),
+                Text = $"ID: {ip.Id} | Quantity: {ip.Quantity} | Sales Price: {ip.SalesPrice:F2} | Product-Name: {ip.Product?.Name}"
+            }).ToList();
+
+            ViewBag.ProductList = productList.Select(p => new SelectListItem
+            {
+                Value = p.Id.ToString(),
+                Text = $"{p.Name} - {p.Price:C}"
+            }).ToList();
+
+            // Verificar se a invoice foi encontrada
+            if (invoiceVm == null) return NotFound();
+
+            return View(invoiceVm);
+        }
+
+
+        //[HttpPost]
+        //public async Task <IActionResult> Comprar([Bind("Id, Quantity, SalesPrice, Ammount, InvoiceId, ProductId")] InvoicesProductsViewModel invoiceProdVm)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        await _productService.Add(invoiceProdVm);
+        //        return RedirectToAction(nameof(Comprar));
+        //    }
+        //    return View(invoiceProdVm);
+        //}
+
 
         [HttpGet()]
         public async Task<IActionResult> Delete(int? id)
