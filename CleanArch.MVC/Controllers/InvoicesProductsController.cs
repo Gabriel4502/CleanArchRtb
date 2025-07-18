@@ -1,17 +1,18 @@
 ﻿using CleanArch.Aplication.Interfaces;
 using CleanArch.Aplication.ViewModels;
+using CleanArch.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CleanArch.MVC.Controllers
 
 {
-    public class InvoicesProducts : Controller
+    public class InvoicesProductsController : Controller
     {
         private readonly IInvoicesProductsService _inProductsService;
         private readonly IProductService _productService;
         private readonly IInvoicesService _invoiceService;
-        public InvoicesProducts(IInvoicesProductsService inProdService,
+        public InvoicesProductsController(IInvoicesProductsService inProdService,
             IProductService prodService, IInvoicesService invoicesService )
         {
             _inProductsService = inProdService;
@@ -36,7 +37,7 @@ namespace CleanArch.MVC.Controllers
 
             ViewBag.InvoiceId = new SelectList(invoices , "Id","Description");
             ViewBag.ProductId = new SelectList(products, "Id", "Name");
-
+            //ViewBag.InvoiceOptions = new SelectList(invoices, "Id", "Name");
 
             return View();
         }
@@ -54,6 +55,47 @@ namespace CleanArch.MVC.Controllers
             ModelState.Clear();
             return View(invoiceProdVm);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Comprar(int? id)
+        {
+            var invoice = await _invoiceService.GetById(id);
+            var products = await _productService.GetProducts();
+            var invproducts = await _inProductsService.GetInvoicesProducts();
+            var invoices = await _invoiceService.GetInvoices();
+            ViewBag.InvoiceId = new SelectList(invoices, "Id", "Description");
+            ViewBag.ProductId = new SelectList(products, "Id", "Name");
+            
+            ViewBag.InvProducts = new SelectList(invproducts, "Id", "Quantity", "Ammount", "SalesPrice");
+            //ViewBag.InProductOptions = products.Select(ip => new SelectListItem
+            //{
+            //    Value = ip.Id.ToString(),
+            //    Text = $"ID: {ip.Id} | Name: {ip.Name} | Sales Price: {ip.Price:F2}"
+            //}).ToList();
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
+
+            ViewBag.Invoice = invoice;
+
+            return View();
+        }
+
+        [HttpPost()]
+        public async Task<IActionResult> Comprar(int id)
+        {
+            //var invoice = await _invoiceService.GetById(id);
+            //var products = await _productService.GetProducts();
+            //var invoices = await _invoiceService.GetInvoices();
+            //ViewBag.InvoiceId = new SelectList(invoices, "Id", "Description");
+            //ViewBag.ProductId = new SelectList(products, "Id", "Name");
+
+            //ViewBag.Invoice = invoice;
+
+            return View();
+        }
+
 
         [HttpGet()]
         public async Task<IActionResult> Edit(int? id)

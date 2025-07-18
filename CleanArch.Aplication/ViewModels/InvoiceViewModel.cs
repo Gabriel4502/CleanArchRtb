@@ -14,7 +14,7 @@ namespace CleanArch.Aplication.ViewModels
         public DateTime CreateAt { get; set; }
         public DateTime UpdateAt { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         //Valor total da soma dos produtos
         public decimal Ammount { get; set; }
@@ -24,7 +24,9 @@ namespace CleanArch.Aplication.ViewModels
         public String? CustomerName { get; set; }
         public String? CustomerEmail { get; set; }
 
-        public InvoicesProductsViewModel? InvoicesProducts { get; set; }
-        public IEnumerable<InvoicesProductsViewModel> ProductsOptions { get; set; } = new List<InvoicesProductsViewModel>();
+        public List<InvoicesProductsViewModel> InvoicesProducts { get; set; } = new List<InvoicesProductsViewModel>();
+        public InvoicesProductsViewModel? InvoiceProduct { get; set; }
+        public IEnumerable<ProductViewModel>? ProductList { get; set; } = new List<ProductViewModel>();
+        public IEnumerable<InvoicesProductsViewModel>? ProductsOptions { get; set; } = new List<InvoicesProductsViewModel>();
     }
 }

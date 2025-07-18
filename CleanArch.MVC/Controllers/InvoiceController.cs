@@ -109,56 +109,121 @@ namespace CleanArch.MVC.Controllers
             return View(invoiceVM);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Comprar(Nullable<int> id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //[HttpGet]
+        //public async Task<IActionResult> Comprar(Nullable<int> id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            // Obter a invoice pelo id
-            var invoiceVm = await _invoiceService.GetById(id);
 
-            // Obter os produtos associados à invoice
-            var invoiceProd = _productService.GetInvoicesProducts().Result.Where(_ => _.InvoiceId == id).ToList();
-            var productList = await _productService1.GetProducts();
+        //    var invoiceVm = await _invoiceService.GetById(id);
 
-            if (invoiceProd == null || !invoiceProd.Any())
-            {
-                return NotFound(); 
-            }
+        //    var invoiceProd = _productService.GetInvoicesProducts().Result.Where(_ => _.InvoiceId == id).ToList();
+        //    invoiceVm.InvoicesProducts = invoiceProd;
+        //    var productList = await _productService1.GetProducts();
+        //    invoiceVm.InvoiceProduct = new InvoicesProductsViewModel();
 
-            // Armazenar a lista de produtos no ViewBag corretamente
-            ViewBag.ProductsOptions = invoiceProd.Select(ip => new SelectListItem
-            {
-                Value = ip.Id.ToString(),
-                Text = $"ID: {ip.Id} | Quantity: {ip.Quantity} | Sales Price: {ip.SalesPrice:F2} | Product-Name: {ip.Product?.Name}"
-            }).ToList();
+        //    // Armazena a lista no ViewBag
+        //    ViewBag.ProductsOptions = invoiceProd.Select(ip => new SelectListItem
+        //    {
+        //        Value = ip.Id.ToString(),
+        //        Text = $"ID: {ip.Id} | Quantity: {ip.Quantity} | Sales Price: {ip.SalesPrice:F2} | Product-Name: {ip.Product?.Name}"
+        //    }).ToList();
 
-            ViewBag.ProductList = productList.Select(p => new SelectListItem
-            {
-                Value = p.Id.ToString(),
-                Text = $"{p.Name} - {p.Price:C}"
-            }).ToList();
+        //    invoiceVm.ProductList = productList;
 
-            // Verificar se a invoice foi encontrada
-            if (invoiceVm == null) return NotFound();
+        //    ViewBag.ProductList = productList.Select(p => new SelectListItem
+        //    {
+        //        Value = p.Id.ToString(),
+        //        Text = $"{p.Name} - {p.Price:C}"
+        //    }).ToList();
 
-            return View(invoiceVm);
-        }
+        //    if (invoiceVm == null) return NotFound();
+
+        //    return View(invoiceVm);
+        //}
 
 
         //[HttpPost]
-        //public async Task <IActionResult> Comprar([Bind("Id, Quantity, SalesPrice, Ammount, InvoiceId, ProductId")] InvoicesProductsViewModel invoiceProdVm)
+        //public async Task<IActionResult> Comprar([Bind("Id, InvoiceProduct.ProductId, InvoiceProduct.Quantity, InvoiceProduct.SalesPrice")] InvoiceViewModel model)
         //{
         //    if (ModelState.IsValid)
         //    {
-        //        await _productService.Add(invoiceProdVm);
-        //        return RedirectToAction(nameof(Comprar));
+        //        Console.WriteLine(model);
+        //        if (model.ProductsOptions == null || !model.ProductsOptions.Any())
+        //        {
+        //            Console.WriteLine("A lista de InvoicesProducts está vazia.");
+        //            ModelState.AddModelError(string.Empty, "Nenhum produto foi selecionado para compra.");
+
+        //        }
+
+        //        var invoice = await _invoiceService.GetById(model.Id);
+
+        //        if (invoice != null)
+        //        {
+        //            //foreach (var item in model.ProductsOptions)
+        //            //{
+        //            //    var invoiceProduct = new InvoicesProductsViewModel
+        //            //    {
+        //            //        ProductId = item.ProductId,
+        //            //        Quantity = item.Quantity,
+        //            //        SalesPrice = item.SalesPrice,
+        //            //        InvoiceId = model.Id
+        //            //    };
+
+        //            //    _productService.Add(invoiceProduct);
+        //            //}
+        //            //_productService.Add(model.InvoiceProduct);
+
+        //            var invoiceProduct = new InvoicesProductsViewModel
+        //            {
+        //                ProductId = model.InvoiceProduct.ProductId,
+        //                Quantity = model.InvoiceProduct.Quantity,
+        //                SalesPrice = model.InvoiceProduct.SalesPrice,
+        //                InvoiceId = model.Id
+        //            };
+
+        //            _productService.Add(invoiceProduct);
+
+        //            return RedirectToAction("Index");
+        //        }
         //    }
-        //    return View(invoiceProdVm);
+
+        //    foreach (var modelStateKey in ModelState.Keys)
+        //    {
+        //        var value = ModelState[modelStateKey];
+        //        foreach (var error in value.Errors)
+        //        {
+        //            Console.WriteLine($"Erro no campo {modelStateKey}: {error.ErrorMessage}");
+        //        }
+        //    }
+
+        //    // Caso ocorra algum erro, recarrega a lista de produtos
+        //    var invoiceVm = await _invoiceService.GetById(model.Id);
+        //    var productList = await _productService1.GetProducts();
+        //    ViewBag.ProductList = productList.Select(p => new SelectListItem
+        //    {
+        //        Value = p.Id.ToString(),
+        //        Text = $"{p.Name} - {p.Price:C}"
+        //    }).ToList();
+
+        //    var invoiceProd = _productService.GetInvoicesProducts().Result.Where(_ => _.InvoiceId == model.Id).ToList();
+        //    ViewBag.ProductsOptions = invoiceProd.Select(ip => new SelectListItem
+        //    {
+        //        Value = ip.Id.ToString(),
+        //        Text = $"ID: {ip.Id} | Quantity: {ip.Quantity} | Sales Price: {ip.SalesPrice:F2} | Product-Name: {ip.Product?.Name}"
+        //    }).ToList();
+
+        //    return View(invoiceVm);
         //}
+
+
+        public IActionResult Comprar(int? id)
+        {
+           return RedirectToAction("InvoicesProducts/Comprar");
+        }
 
 
         [HttpGet()]

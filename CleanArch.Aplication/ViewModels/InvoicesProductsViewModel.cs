@@ -37,7 +37,7 @@ namespace CleanArch.Aplication.ViewModels
         public int ProductId { get; set; } = 0;
         public Product? Product { get; set; }
 
-        //public IEnumerator<InvoicesProducts>? Enumerator { get; set; }
+        public IEnumerable<InvoicesProducts> InvoicesProductsOptions { get; set; } = new List<InvoicesProducts>();
 
         public IEnumerable<InvoiceViewModel> InvoiceOptions { get; set; } = new List<InvoiceViewModel>();
         public IEnumerable<ProductViewModel> ProductOptions { get; set; } = new List<ProductViewModel>();

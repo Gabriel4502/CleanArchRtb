@@ -1,0 +1,65 @@
+﻿@model CleanArch.Aplication.ViewModels.InvoicesProductsViewModel
+
+@{
+    ViewBag.Title = "Comprar";
+
+}
+
+<h3>Realizar compra</h3>
+
+<div>
+    <hr />
+
+    <dl class="row">
+
+        <dt class="col-sm2">
+            @ViewBag.Invoice.Id
+        </dt>
+        <dd class="col-sm-10">
+            
+        </dd>
+        <dt class="col-sm2">
+            @ViewBag.Invoice.CreateAt
+        </dt>
+        <dd class="col-sm-10">
+           
+        </dd>
+        <dt class="col-sm2">
+           @ViewBag.Invoice.UpdateAt
+        </dt>
+        <dd class="col-sm-10">
+           
+        </dd>
+
+        <dt class="col-sm2">
+                @ViewBag.Invoice.Ammount
+        </dt>
+        <dd class="col-sm-10">
+                
+        </dd>
+
+
+        <dt class="col-sm2">
+                    @ViewBag.Invoice.CustomerName
+        </dt>
+        <dd class="col-sm-10">
+                    
+        </dd>
+         <dt class="col-sm2">
+            @ViewBag.Invoice.CustomerEmail
+        </dt>
+        <dd class="col-sm-10">
+            
+        </dd>
+
+        <div class="form-group">
+            <label asp-for="ProductId" class="col-md-2 control-label">Product</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.ProductId, (SelectList)ViewBag.ProductOptions, "Select a product", new { @class = "form-control", @id = "productDropdown" })
+                <span asp-validation-for="ProductId" class="text-danger"></span>
+            </div>
+        </div>
+
+
+    </dl>
+</div>
