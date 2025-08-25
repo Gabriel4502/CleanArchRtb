@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="DevExpress.AspNetCore.Reporting" Version="24.1.5" />
   </ItemGroup>
 
 </Project>

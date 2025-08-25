@@ -1,0 +1,159 @@
+﻿@model CleanArch.Aplication.ViewModels.InvoiceViewModel
+
+@{
+    ViewBag.Title = "Comprar";
+
+}
+
+<h3>Realizar compra</h3>
+
+<div>
+    <hr />
+
+    <dl class="row">
+
+        <dt class="col-sm2">
+            @Html.DisplayNameFor(Model => Model.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(Model => Model.Id)
+        </dd>
+        <dt class="col-sm2">
+            @Html.DisplayNameFor(Model => Model.CreateAt)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(Model => Model.CreateAt)
+        </dd>
+        <dt class="col-sm2">
+            @Html.DisplayNameFor(Model => Model.UpdateAt)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(Model => Model.UpdateAt)
+        </dd>
+
+
+        <dt class="col-sm2">
+            @Html.DisplayNameFor(Model => Model.Ammount)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(Model => Model.Ammount)
+        </dd>
+
+
+
+        <dt class="col-sm2">
+            @Html.DisplayNameFor(Model => Model.CustomerName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(Model => Model.CustomerName)
+        </dd>
+
+        <dt class="col-sm2">
+            @Html.DisplayNameFor(Model => Model.CustomerEmail)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(Model => Model.CustomerEmail)
+        </dd>
+
+        <dd class="col-sm-10">
+            <label>Items:</label>
+            <select class="form-control">
+                @foreach (var item in ViewBag.ProductsOptions as IEnumerable<SelectListItem>)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            </select>
+        </dd>
+
+    </dl>
+</div>
+<form asp-action="Comprar" method="post" asp-controller="Invoice">
+    <div>
+        <button id="show-form-btn" class="btn btn-primary">Adicionar Item</button>
+
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            <label asp-for="InvoiceProduct.ProductId" class="col-md-2 control-label">Produto</label>
+            <div class="col-md-10">
+
+
+
+                @if (ViewBag.ProductsOptions != null)
+                {
+                    @* @Html.DropDownList("SelectedProduct", (IEnumerable<SelectListItem>)ViewBag.ProductList, "Selecione um produto", new { @class = "form-control", @id = "productDropdown" }) *@
+                    @Html.DropDownListFor(model => model.InvoiceProduct.ProductId, (IEnumerable<SelectListItem>)ViewBag.ProductList, "Selecione um produto", new { @class = "form-control", @id = "productDropdown" })
+                    @foreach (var item in ViewBag.ProductsOptions)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                }
+                else
+                {
+                    <p class="text-danger">Nenhum produto disponível.</p>
+                }
+                <span asp-validation-for="InvoiceProduct.ProductId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="InvoiceProduct.Quantity" class="col-md-2 control-label">Quantidade</label>
+            <div class="col-md-10">
+                <input asp-for="InvoiceProduct.Quantity" class="form-control" />
+                <span asp-validation-for="InvoiceProduct.Quantity" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                @Html.LabelFor(m => m.InvoiceProduct.SalesPrice)
+                @Html.TextBoxFor(m => m.InvoiceProduct.SalesPrice, new { @class = "form-control", @id = "salesPrice", @readonly = "readonly" })
+                @Html.ValidationMessageFor(m => m.InvoiceProduct.SalesPrice)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Comprar" class="btn btn-success" />
+                <a asp-action="Index" class="btn btn-info">Voltar</a>
+            </div>
+        </div>
+    </div>
+
+
+</form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Evento de mudança do dropdown de produtos
+        $('#productDropdown').change(function () {
+            var productId = $(this).val(); // Pega o valor selecionado
+            if (productId) {
+                $.ajax({
+                    url: '/InvoicesProducts/GetSalesPrice',
+                    type: 'GET',
+                    data: { productId: productId },
+                    success: function (response) {
+
+                        $('#salesPrice').val(response.salesPrice.toFixed(2));
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            } else {
+                // Limpa o campo SalesPrice se nenhum produto for selecionado
+                $('#salesPrice').val('');
+            }
+        });
+
+        function executarAoCarregarPagina() {
+            console.log("A página foi carregada!");
+            // Insira qualquer outra ação que você deseja realizar ao carregar
+        }
+
+        // Chame a função diretamente ao carregar a página
+        executarAoCarregarPagina();
+
+    });
+</script>

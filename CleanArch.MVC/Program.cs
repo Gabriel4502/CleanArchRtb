@@ -3,9 +3,11 @@ using CleanArch.Infra.Ioc;
 using CleanArch.MVC.MappingConfig;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
+using DevExpress.AspNetCore;
+using DevExpress.AspNetCore.Reporting;
 
-    var builder = WebApplication.CreateBuilder(args);
-
+var builder = WebApplication.CreateBuilder(args);
+    
 
 
 
@@ -20,7 +22,13 @@ using System.Globalization;
     builder.Services.AddControllersWithViews();
     builder.Services.AddRazorPages();
     builder.Services.AddAutoMapperConfiguration();
-
+    builder.Services.AddDevExpressControls();
+//builder.Services.AddMvc();
+builder.Services.ConfigureReportingServices(configurator => {
+    configurator.ConfigureWebDocumentViewer(viewerConfigurator => {
+        viewerConfigurator.UseCachedReportSourceBuilder();
+    });
+});
 var app = builder.Build();
 
     // Configure the HTTP request pipeline.
@@ -34,8 +42,10 @@ var app = builder.Build();
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
     }
+app.UseDevExpressControls();
+System.Net.ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls12;
 
-    app.UseHttpsRedirection();
+app.UseHttpsRedirection();
     app.UseStaticFiles();
 
     app.UseRouting();
@@ -46,7 +56,11 @@ var app = builder.Build();
     app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
-    app.MapRazorPages();
+
+    app.MapControllerRoute(
+        name: "report",
+        pattern: "{controller=Report}/{action=InvoiceReport}");
+app.MapRazorPages();
 
 var cultureInfo = new CultureInfo("en-US");
 CultureInfo.DefaultThreadCurrentCulture = cultureInfo;

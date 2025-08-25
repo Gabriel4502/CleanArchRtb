@@ -1,17 +1,18 @@
 ﻿using CleanArch.Aplication.Interfaces;
 using CleanArch.Aplication.ViewModels;
+using CleanArch.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CleanArch.MVC.Controllers
 
 {
-    public class InvoicesProducts : Controller
+    public class InvoicesProductsController : Controller
     {
         private readonly IInvoicesProductsService _inProductsService;
         private readonly IProductService _productService;
         private readonly IInvoicesService _invoiceService;
-        public InvoicesProducts(IInvoicesProductsService inProdService,
+        public InvoicesProductsController(IInvoicesProductsService inProdService,
             IProductService prodService, IInvoicesService invoicesService )
         {
             _inProductsService = inProdService;
@@ -36,7 +37,7 @@ namespace CleanArch.MVC.Controllers
 
             ViewBag.InvoiceId = new SelectList(invoices , "Id","Description");
             ViewBag.ProductId = new SelectList(products, "Id", "Name");
-
+            //ViewBag.InvoiceOptions = new SelectList(invoices, "Id", "Name");
 
             return View();
         }
@@ -54,6 +55,72 @@ namespace CleanArch.MVC.Controllers
             ModelState.Clear();
             return View(invoiceProdVm);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Comprar(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var invoice = await _invoiceService.GetById(id);
+            if (invoice == null) return NotFound();
+
+            var products = await _productService.GetProducts();
+            var invproducts = await _inProductsService.GetInvoicesProductsByIdEqual(invoice.Id)
+                              ?? new List<InvoicesProductsViewModel>();
+
+            ViewBag.ProductOptions = new SelectList(products, "Id", "Name");
+            ViewBag.Invoice = invoice;
+
+            var model = new ComprarViewModel
+            {
+                InvoiceId = invoice.Id,
+                Invoice = invoice,
+                InvoiceProducts = invproducts
+            };
+
+            return View(model);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Comprar(ComprarViewModel model)
+        {
+ 
+            var toCreate = new InvoicesProductsViewModel
+            {
+                InvoiceId = model.InvoiceId,
+                ProductId = model.ProductId,
+                Quantity = model.InvoiceProduct?.Quantity ?? 0,
+                SalesPrice = model.InvoiceProduct?.SalesPrice ?? 0m,
+                Ammount = (model.InvoiceProduct?.Quantity ?? 0) * (model.InvoiceProduct?.SalesPrice ?? 0m)
+            };
+
+        
+            ModelState.Clear();
+            if (!TryValidateModel(toCreate, prefix: ""))
+            {
+                var errs = ModelState
+                    .Where(k => k.Value?.Errors?.Any() == true)
+                    .Select(k => new { k.Key, Errors = k.Value!.Errors.Select(e => e.ErrorMessage) })
+                    .ToList();
+                System.Diagnostics.Debug.WriteLine("toCreate MS: " + System.Text.Json.JsonSerializer.Serialize(errs));
+
+
+                var products = await _productService.GetProducts();
+                ViewBag.ProductOptions = new SelectList(products, "Id", "Name");
+                model.Invoice = await _invoiceService.GetById(model.InvoiceId);
+                model.InvoiceProducts = await _inProductsService.GetInvoicesProductsByIdEqual(model.InvoiceId);
+                return View(model);
+            }
+
+            System.Diagnostics.Debug.WriteLine("toCreate payload: " + System.Text.Json.JsonSerializer.Serialize(toCreate));
+
+            await _inProductsService.Add(toCreate);
+            return RedirectToAction(nameof(Comprar), new { id = model.InvoiceId });
+        }
+
+
 
         [HttpGet()]
         public async Task<IActionResult> Edit(int? id)
@@ -139,6 +206,19 @@ namespace CleanArch.MVC.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetSalesPrice(int productId)
+        {
+            var product = await _productService.GetById(productId);
+            if (product != null)
+            {
+               
+                return Json(new { salesPrice = product.Price });
+            }
+
+            return Json(new { salesPrice = 0 });
         }
     }
 }

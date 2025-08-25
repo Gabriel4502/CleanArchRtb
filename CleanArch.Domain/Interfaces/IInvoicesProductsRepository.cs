@@ -12,6 +12,7 @@ namespace CleanArch.Domain.Interfaces
         Task<IEnumerable<InvoicesProducts>> GetInvoicesProducts();
 
         Task<IEnumerable<InvoicesProducts>> GetInvoicesByIdEqual(int? Id, int? InvoiceId);
+        Task<IEnumerable<InvoicesProducts>> GetInvoicesProductsByIdEqual(int? InvoiceId);
         Task<InvoicesProducts>GetById(int? id);
 
         void Add(InvoicesProducts invoicesProducts);
