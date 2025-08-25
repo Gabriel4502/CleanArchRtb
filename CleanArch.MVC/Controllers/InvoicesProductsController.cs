@@ -59,42 +59,67 @@ namespace CleanArch.MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Comprar(int? id)
         {
-            var invoice = await _invoiceService.GetById(id);
-            var products = await _productService.GetProducts();
-            var invproducts = await _inProductsService.GetInvoicesProducts();
-            var invoices = await _invoiceService.GetInvoices();
-            ViewBag.InvoiceId = new SelectList(invoices, "Id", "Description");
-            ViewBag.ProductId = new SelectList(products, "Id", "Name");
-            
-            ViewBag.InvProducts = new SelectList(invproducts, "Id", "Quantity", "Ammount", "SalesPrice");
-            //ViewBag.InProductOptions = products.Select(ip => new SelectListItem
-            //{
-            //    Value = ip.Id.ToString(),
-            //    Text = $"ID: {ip.Id} | Name: {ip.Name} | Sales Price: {ip.Price:F2}"
-            //}).ToList();
-            //if (id == null)
-            //{
-            //    return NotFound();
-            //}
+            if (id == null) return NotFound();
 
+            var invoice = await _invoiceService.GetById(id);
+            if (invoice == null) return NotFound();
+
+            var products = await _productService.GetProducts();
+            var invproducts = await _inProductsService.GetInvoicesProductsByIdEqual(invoice.Id)
+                              ?? new List<InvoicesProductsViewModel>();
+
+            ViewBag.ProductOptions = new SelectList(products, "Id", "Name");
             ViewBag.Invoice = invoice;
 
-            return View();
+            var model = new ComprarViewModel
+            {
+                InvoiceId = invoice.Id,
+                Invoice = invoice,
+                InvoiceProducts = invproducts
+            };
+
+            return View(model);
         }
 
-        [HttpPost()]
-        public async Task<IActionResult> Comprar(int id)
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Comprar(ComprarViewModel model)
         {
-            //var invoice = await _invoiceService.GetById(id);
-            //var products = await _productService.GetProducts();
-            //var invoices = await _invoiceService.GetInvoices();
-            //ViewBag.InvoiceId = new SelectList(invoices, "Id", "Description");
-            //ViewBag.ProductId = new SelectList(products, "Id", "Name");
+ 
+            var toCreate = new InvoicesProductsViewModel
+            {
+                InvoiceId = model.InvoiceId,
+                ProductId = model.ProductId,
+                Quantity = model.InvoiceProduct?.Quantity ?? 0,
+                SalesPrice = model.InvoiceProduct?.SalesPrice ?? 0m,
+                Ammount = (model.InvoiceProduct?.Quantity ?? 0) * (model.InvoiceProduct?.SalesPrice ?? 0m)
+            };
 
-            //ViewBag.Invoice = invoice;
+        
+            ModelState.Clear();
+            if (!TryValidateModel(toCreate, prefix: ""))
+            {
+                var errs = ModelState
+                    .Where(k => k.Value?.Errors?.Any() == true)
+                    .Select(k => new { k.Key, Errors = k.Value!.Errors.Select(e => e.ErrorMessage) })
+                    .ToList();
+                System.Diagnostics.Debug.WriteLine("toCreate MS: " + System.Text.Json.JsonSerializer.Serialize(errs));
 
-            return View();
+
+                var products = await _productService.GetProducts();
+                ViewBag.ProductOptions = new SelectList(products, "Id", "Name");
+                model.Invoice = await _invoiceService.GetById(model.InvoiceId);
+                model.InvoiceProducts = await _inProductsService.GetInvoicesProductsByIdEqual(model.InvoiceId);
+                return View(model);
+            }
+
+            System.Diagnostics.Debug.WriteLine("toCreate payload: " + System.Text.Json.JsonSerializer.Serialize(toCreate));
+
+            await _inProductsService.Add(toCreate);
+            return RedirectToAction(nameof(Comprar), new { id = model.InvoiceId });
         }
+
 
 
         [HttpGet()]

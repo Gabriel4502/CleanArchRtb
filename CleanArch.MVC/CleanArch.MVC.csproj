@@ -41,6 +41,7 @@
     <PackageReference Include="DevExpress.AspNetCore.Reporting" Version="24.1.5" />
     <PackageReference Include="DevExpress.Reporting.Core" Version="24.1.5" />
     <PackageReference Include="DevExpress.Xpo" Version="24.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.3.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.17" />
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
   </ItemGroup>

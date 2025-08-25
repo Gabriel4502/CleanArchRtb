@@ -69,11 +69,17 @@ namespace CleanArch.Aplication.Services
 
             result.Ammount = result.SalesPrice* result.Quantity;
             var invoicesProducts = await _repository.GetInvoicesByIdEqual(result.Id, result.InvoiceId);
-            invoice.Ammount += invoice.Ammount; 
+            invoice.Ammount += invoice.Ammount;
         
             _invoiceRepository.Update(invoice);
             _repository.Update(result);
            
+        }
+
+        public async Task<IEnumerable<InvoicesProductsViewModel>> GetInvoicesProductsByIdEqual(int? invoiceId)
+        {
+            var result = await _repository.GetInvoicesProductsByIdEqual(invoiceId);
+            return _mapper.Map<IEnumerable<InvoicesProductsViewModel>>(result).ToList();
         }
     }
 }

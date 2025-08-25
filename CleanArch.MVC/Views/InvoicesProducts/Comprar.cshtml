@@ -1,65 +1,137 @@
-﻿@model CleanArch.Aplication.ViewModels.InvoicesProductsViewModel
+﻿@model CleanArch.Aplication.ViewModels.ComprarViewModel
 
 @{
-    ViewBag.Title = "Comprar";
-
+    ViewData["Title"] = "Comprar";
 }
 
 <h3>Realizar compra</h3>
-
-<div>
     <hr />
 
+<div>
+
     <dl class="row">
-
-        <dt class="col-sm2">
-            @ViewBag.Invoice.Id
-        </dt>
-        <dd class="col-sm-10">
-            
-        </dd>
-        <dt class="col-sm2">
-            @ViewBag.Invoice.CreateAt
-        </dt>
-        <dd class="col-sm-10">
-           
-        </dd>
-        <dt class="col-sm2">
-           @ViewBag.Invoice.UpdateAt
-        </dt>
-        <dd class="col-sm-10">
-           
-        </dd>
-
-        <dt class="col-sm2">
-                @ViewBag.Invoice.Ammount
-        </dt>
-        <dd class="col-sm-10">
-                
-        </dd>
-
-
-        <dt class="col-sm2">
-                    @ViewBag.Invoice.CustomerName
-        </dt>
-        <dd class="col-sm-10">
-                    
-        </dd>
-         <dt class="col-sm2">
-            @ViewBag.Invoice.CustomerEmail
-        </dt>
-        <dd class="col-sm-10">
-            
-        </dd>
-
-        <div class="form-group">
-            <label asp-for="ProductId" class="col-md-2 control-label">Product</label>
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.ProductId, (SelectList)ViewBag.ProductOptions, "Select a product", new { @class = "form-control", @id = "productDropdown" })
-                <span asp-validation-for="ProductId" class="text-danger"></span>
-            </div>
-        </div>
-
+        <dt class="col-sm2">@Model.Invoice.Id</dt>
+        <dd class="col-sm-10"></dd>
+        <dt class="col-sm2">@Model.Invoice.Description</dt>
+        <dd class="col-sm-10"></dd>
+        <dt class="col-sm2">@Model.Invoice.CreateAt</dt>
+        <dd class="col-sm-10"></dd>
+        <dt class="col-sm2">@Model.Invoice.UpdateAt</dt>
+        <dd class="col-sm-10"></dd>
+        <dt class="col-sm2">@Model.Invoice.Ammount</dt>
+        <dd class="col-sm-10"></dd>
+        <dt class="col-sm2">@Model.Invoice.CustomerName</dt>
+        <dd class="col-sm-10"></dd>
+        <dt class="col-sm2">@Model.Invoice.CustomerEmail</dt>
+        <dd class="col-sm-10"></dd>
 
     </dl>
+
+    @if (Model.InvoiceProducts != null && Model.InvoiceProducts.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Criado em</th>
+                    <th>Quantidade</th>
+                    <th>Produto</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.InvoiceProducts)
+                {
+                    <tr>
+                        <td>@item.CreateAt</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Product?.Name</td>
+                        <td>@item.Ammount</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Nenhum produto encontrado.</p>
+    }
+
+
+    <form asp-action="Comprar" method="post">
+        @Html.AntiForgeryToken()
+
+        <!-- Envie o InvoiceId! -->
+        @Html.HiddenFor(m => m.InvoiceId)
+
+        <div class="form-horizontal">
+            <hr />
+            <vc:summary />
+            @Html.HiddenFor(m => m.InvoiceId)
+
+            <!-- Envie também no objeto aninhado -->
+            <input type="hidden" asp-for="InvoiceProduct.InvoiceId" value="@Model.InvoiceId" />
+            <input type="hidden" asp-for="InvoiceProduct.ProductId" id="invprodProductId" value="@(Model.ProductId)" />
+
+            @Html.DropDownListFor(m => m.ProductId, (SelectList)ViewBag.ProductOptions,
+            "Selecione um produto",
+                        new { @class = "form-control", id = "productDropdown" })
+
+           
+
+
+            <div class="form-group">
+                <label asp-for="InvoiceProduct.Quantity" class="col-md-2 control-label">Quantidade</label>
+                <div class="col-md-10">
+                    <input asp-for="InvoiceProduct.Quantity" class="form-control" />
+                    <span asp-validation-for="InvoiceProduct.Quantity" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-10">
+                    @Html.LabelFor(m => m.InvoiceProduct.SalesPrice, "Preço de venda")
+                    @Html.TextBoxFor(m => m.InvoiceProduct.SalesPrice,
+                                        new { @class = "form-control", @id = "salesPrice", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(m => m.InvoiceProduct.SalesPrice)
+                </div>
+            </div>
+
+            <!-- Se quiser enviar o Ammount calculado no client, inclua um hidden;
+                 mas o ideal é recalcular no servidor. -->
+            @* @Html.HiddenFor(m => m.InvoiceProduct.Ammount) *@
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-success" />
+                    <a asp-action="Index" class="btn btn-info">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#productDropdown').change(function () {
+            var productId = $(this).val();
+            if (productId) {
+                $.ajax({
+                    url: '/InvoicesProducts/GetSalesPrice',
+                    type: 'GET',
+                    data: { productId: productId },
+                    success: function (response) {
+                        if (response && response.salesPrice != null) {
+                            $('#salesPrice').val(Number(response.salesPrice).toFixed(2));
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            } else {
+                $('#salesPrice').val('');
+            }
+        });
+    });
+</script>

@@ -58,5 +58,12 @@ namespace CleanArch.Infra.Data.Repositories
              .FromSqlInterpolated($"SELECT * FROM InvoicesProducts WHERE Id = {Id} AND InvoiceId = {invoiceId}")
              .ToListAsync();
         }
+
+        public async Task<IEnumerable<InvoicesProducts>> GetInvoicesProductsByIdEqual(int? invoiceId)
+        {
+            return await _context.InvoicesProducts
+             .FromSqlInterpolated($"SELECT * FROM InvoicesProducts WHERE InvoiceId = {invoiceId}")
+             .ToListAsync();
+        }
     }
 }

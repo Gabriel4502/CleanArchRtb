@@ -10,6 +10,7 @@ namespace CleanArch.Aplication.Interfaces
     public interface IInvoicesProductsService
     {
         Task<IEnumerable<InvoicesProductsViewModel>> GetInvoicesProducts();
+        Task<IEnumerable<InvoicesProductsViewModel>> GetInvoicesProductsByIdEqual(int? InvoiceId);
         Task<InvoicesProductsViewModel> GetById(int? id);
 
         Task Add(InvoicesProductsViewModel invoicePr);
